@@ -74,6 +74,7 @@ const App = () => (
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
               <Route path="/cadastro" element={<PublicRoute><CadastroPage /></PublicRoute>} />
               <Route path="/onboarding" element={<OnboardingPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="/completar-cadastro" element={<CadastroRoute><CompletarCadastroPage /></CadastroRoute>} />
               <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
               {/* SOS page is public — visible to everyone */}
