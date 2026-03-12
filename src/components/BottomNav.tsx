@@ -2,6 +2,7 @@ import { Shield, Map, Navigation, Settings } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 const protectedPaths = ["/mapa", "/trajeto", "/config"];
 
@@ -24,7 +25,13 @@ const BottomNav = () => {
 
   const handleNav = (path: string) => {
     if (protectedPaths.includes(path) && !user) {
-      navigate("/cadastro");
+      toast("Cadastre-se para acessar este recurso", {
+        description: "Crie sua conta para usar todas as funcionalidades",
+        action: {
+          label: "Cadastrar",
+          onClick: () => navigate("/cadastro"),
+        },
+      });
       return;
     }
     if (protectedPaths.includes(path) && user && !cadastroCompleto) {
