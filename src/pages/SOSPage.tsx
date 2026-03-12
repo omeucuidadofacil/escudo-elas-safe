@@ -1,22 +1,37 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import SOSButton from "@/components/SOSButton";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
 const SOSPage = () => {
-  const { user } = useAuth();
+  const { user, cadastroCompleto } = useAuth();
+  const navigate = useNavigate();
   const [isAlertActive, setIsAlertActive] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
 
+  const requireAuth = useCallback(() => {
+    if (!user) {
+      navigate("/cadastro");
+      return false;
+    }
+    if (!cadastroCompleto) {
+      navigate("/completar-cadastro");
+      return false;
+    }
+    return true;
+  }, [user, cadastroCompleto, navigate]);
+
   const handleActivate = useCallback(async () => {
+    if (!requireAuth()) return;
+
     setShowFlash(true);
     setTimeout(() => setShowFlash(false), 200);
     setIsAlertActive(true);
 
-    // Get location and save alert
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
@@ -27,7 +42,6 @@ const SOSPage = () => {
             longitude: pos.coords.longitude,
             status: "ativo",
           });
-          // Save real-time location
           await supabase.from("localizacao_tempo_real").insert({
             user_id: user!.id,
             latitude: pos.coords.latitude,
@@ -35,7 +49,6 @@ const SOSPage = () => {
           });
         },
         () => {
-          // Save alert without location
           supabase.from("alertas").insert({
             user_id: user!.id,
             tipo_alerta: "sos",
@@ -46,11 +59,10 @@ const SOSPage = () => {
     }
 
     toast.success("Alerta ativado. Contatos notificados.", { duration: 5000 });
-  }, [user]);
+  }, [user, requireAuth]);
 
   const handleCancel = useCallback(async () => {
     setIsAlertActive(false);
-    // Update latest alert status
     if (user) {
       const { data } = await supabase
         .from("alertas")
