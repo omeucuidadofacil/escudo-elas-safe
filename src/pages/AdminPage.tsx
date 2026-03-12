@@ -6,7 +6,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-type Tab = "dashboard" | "usuarios" | "alertas" | "incidentes" | "config";
+import PlanosTab from "@/components/admin/PlanosTab";
+import ApiKeysTab from "@/components/admin/ApiKeysTab";
+
+type Tab = "dashboard" | "usuarios" | "alertas" | "incidentes" | "planos" | "apis" | "config";
 
 const AdminPage = () => {
   const { signOut } = useAuth();
