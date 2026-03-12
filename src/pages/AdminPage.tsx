@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Users, AlertTriangle, MapPin, BarChart3, Trash2, Ban, CheckCircle2, LogOut, XCircle, Edit3, X, Save, Key } from "lucide-react";
+import { Shield, Users, AlertTriangle, MapPin, BarChart3, Trash2, Ban, CheckCircle2, LogOut, XCircle, Edit3, X, Save, Key, CreditCard, Code } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
