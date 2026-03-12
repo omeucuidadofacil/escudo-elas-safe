@@ -1,6 +1,9 @@
 import { Shield, Map, Navigation, Settings } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
+
+const protectedPaths = ["/mapa", "/trajeto", "/config"];
 
 const tabs = [
   { path: "/", icon: Shield, label: "SOS" },
@@ -12,12 +15,24 @@ const tabs = [
 const BottomNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, cadastroCompleto } = useAuth();
 
-  // Hide nav during alert state or onboarding
-  const hiddenRoutes = ["/onboarding", "/login", "/cadastro", "/completar-cadastro", "/admin"];
+  const hiddenRoutes = ["/onboarding", "/completar-cadastro", "/admin"];
   if (hiddenRoutes.includes(location.pathname)) {
     return null;
   }
+
+  const handleNav = (path: string) => {
+    if (protectedPaths.includes(path) && !user) {
+      navigate("/cadastro");
+      return;
+    }
+    if (protectedPaths.includes(path) && user && !cadastroCompleto) {
+      navigate("/completar-cadastro");
+      return;
+    }
+    navigate(path);
+  };
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border">
@@ -28,7 +43,7 @@ const BottomNav = () => {
           return (
             <motion.button
               key={tab.path}
-              onClick={() => navigate(tab.path)}
+              onClick={() => handleNav(tab.path)}
               className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
                 isActive ? "text-primary" : "text-muted-foreground"
               }`}
@@ -41,7 +56,6 @@ const BottomNav = () => {
           );
         })}
       </div>
-      {/* Safe area bottom padding */}
       <div className="h-[env(safe-area-inset-bottom)]" />
     </nav>
   );

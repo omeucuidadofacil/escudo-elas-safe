@@ -27,7 +27,7 @@ const LoadingSpinner = () => (
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading, cadastroCompleto, profileLoading, isAdmin } = useAuth();
   if (loading || profileLoading) return <LoadingSpinner />;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/cadastro" replace />;
   if (isAdmin) return <Navigate to="/admin" replace />;
   if (!cadastroCompleto) return <Navigate to="/completar-cadastro" replace />;
   return <>{children}</>;
