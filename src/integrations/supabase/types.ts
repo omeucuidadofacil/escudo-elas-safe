@@ -127,6 +127,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          aprovado: boolean
           bairro: string | null
           cadastro_completo: boolean
           cep: string | null
@@ -149,6 +150,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          aprovado?: boolean
           bairro?: string | null
           cadastro_completo?: boolean
           cep?: string | null
@@ -171,6 +173,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          aprovado?: boolean
           bairro?: string | null
           cadastro_completo?: boolean
           cep?: string | null
