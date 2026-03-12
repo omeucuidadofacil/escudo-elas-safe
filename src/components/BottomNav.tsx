@@ -14,7 +14,8 @@ const BottomNav = () => {
   const navigate = useNavigate();
 
   // Hide nav during alert state or onboarding
-  if (location.pathname === "/onboarding" || location.pathname === "/login" || location.pathname === "/cadastro") {
+  const hiddenRoutes = ["/onboarding", "/login", "/cadastro", "/completar-cadastro", "/admin"];
+  if (hiddenRoutes.includes(location.pathname)) {
     return null;
   }
 

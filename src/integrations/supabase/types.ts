@@ -127,39 +127,87 @@ export type Database = {
       }
       profiles: {
         Row: {
+          bairro: string | null
+          cadastro_completo: boolean
+          cep: string | null
+          cidade: string | null
+          complemento: string | null
+          cpf: string | null
           created_at: string
           email: string | null
+          estado: string | null
           foto_url: string | null
           id: string
           latitude: number | null
           longitude: number | null
           nome: string
+          numero: string | null
+          rua: string | null
           telefone: string | null
+          telefone_celular: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          bairro?: string | null
+          cadastro_completo?: boolean
+          cep?: string | null
+          cidade?: string | null
+          complemento?: string | null
+          cpf?: string | null
           created_at?: string
           email?: string | null
+          estado?: string | null
           foto_url?: string | null
           id?: string
           latitude?: number | null
           longitude?: number | null
           nome?: string
+          numero?: string | null
+          rua?: string | null
           telefone?: string | null
+          telefone_celular?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          bairro?: string | null
+          cadastro_completo?: boolean
+          cep?: string | null
+          cidade?: string | null
+          complemento?: string | null
+          cpf?: string | null
           created_at?: string
           email?: string | null
+          estado?: string | null
           foto_url?: string | null
           id?: string
           latitude?: number | null
           longitude?: number | null
           nome?: string
+          numero?: string | null
+          rua?: string | null
           telefone?: string | null
+          telefone_celular?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
         Relationships: []
@@ -169,10 +217,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -299,6 +353,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
