@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2 } from "lucide-react";
+import { Volume2, Shield, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SOSButton from "@/components/SOSButton";
 import { supabase } from "@/integrations/supabase/client";
