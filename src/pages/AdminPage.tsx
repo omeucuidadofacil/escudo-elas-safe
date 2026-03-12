@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Users, AlertTriangle, MapPin, BarChart3, Trash2, Ban, CheckCircle2, LogOut, XCircle, Edit3, X, Save, Key } from "lucide-react";
+import { Shield, Users, AlertTriangle, MapPin, BarChart3, Trash2, Ban, CheckCircle2, LogOut, XCircle, Edit3, X, Save, Key, CreditCard, Code } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-type Tab = "dashboard" | "usuarios" | "alertas" | "incidentes" | "config";
+import PlanosTab from "@/components/admin/PlanosTab";
+import ApiKeysTab from "@/components/admin/ApiKeysTab";
+
+type Tab = "dashboard" | "usuarios" | "alertas" | "incidentes" | "planos" | "apis" | "config";
 
 const AdminPage = () => {
   const { signOut } = useAuth();
@@ -152,6 +155,8 @@ const AdminPage = () => {
     { key: "usuarios", label: "Usuárias", icon: Users },
     { key: "alertas", label: "Alertas", icon: AlertTriangle },
     { key: "incidentes", label: "Incidentes", icon: MapPin },
+    { key: "planos", label: "Planos", icon: CreditCard },
+    { key: "apis", label: "APIs", icon: Code },
     { key: "config", label: "Config", icon: Key },
   ];
 
@@ -347,6 +352,12 @@ const AdminPage = () => {
                 ))}
               </div>
             )}
+
+            {/* Planos */}
+            {tab === "planos" && <PlanosTab />}
+
+            {/* APIs */}
+            {tab === "apis" && <ApiKeysTab />}
 
             {/* Config */}
             {tab === "config" && (
