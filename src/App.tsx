@@ -11,21 +11,52 @@ import ConfigPage from "@/pages/ConfigPage";
 import OnboardingPage from "@/pages/OnboardingPage";
 import LoginPage from "@/pages/LoginPage";
 import CadastroPage from "@/pages/CadastroPage";
+import CompletarCadastroPage from "@/pages/CompletarCadastroPage";
+import AdminPage from "@/pages/AdminPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const LoadingSpinner = () => (
+  <div className="min-h-svh flex items-center justify-center bg-background">
+    <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+  </div>
+);
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-svh flex items-center justify-center bg-background"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>;
+  const { user, loading, cadastroCompleto, profileLoading, isAdmin } = useAuth();
+  if (loading || profileLoading) return <LoadingSpinner />;
   if (!user) return <Navigate to="/login" replace />;
+  if (isAdmin) return <Navigate to="/admin" replace />;
+  if (!cadastroCompleto) return <Navigate to="/completar-cadastro" replace />;
   return <>{children}</>;
 };
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-  if (loading) return null;
-  if (user) return <Navigate to="/" replace />;
+  const { user, loading, profileLoading, isAdmin, cadastroCompleto } = useAuth();
+  if (loading || profileLoading) return <LoadingSpinner />;
+  if (user) {
+    if (isAdmin) return <Navigate to="/admin" replace />;
+    if (!cadastroCompleto) return <Navigate to="/completar-cadastro" replace />;
+    return <Navigate to="/" replace />;
+  }
+  return <>{children}</>;
+};
+
+const CadastroRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading, cadastroCompleto, profileLoading, isAdmin } = useAuth();
+  if (loading || profileLoading) return <LoadingSpinner />;
+  if (!user) return <Navigate to="/login" replace />;
+  if (isAdmin) return <Navigate to="/admin" replace />;
+  if (cadastroCompleto) return <Navigate to="/" replace />;
+  return <>{children}</>;
+};
+
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading, isAdmin, profileLoading } = useAuth();
+  if (loading || profileLoading) return <LoadingSpinner />;
+  if (!user) return <Navigate to="/login" replace />;
+  if (!isAdmin) return <Navigate to="/" replace />;
   return <>{children}</>;
 };
 
@@ -40,6 +71,8 @@ const App = () => (
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
               <Route path="/cadastro" element={<PublicRoute><CadastroPage /></PublicRoute>} />
               <Route path="/onboarding" element={<OnboardingPage />} />
+              <Route path="/completar-cadastro" element={<CadastroRoute><CompletarCadastroPage /></CadastroRoute>} />
+              <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
               <Route path="/" element={<ProtectedRoute><SOSPage /></ProtectedRoute>} />
               <Route path="/mapa" element={<ProtectedRoute><MapaPage /></ProtectedRoute>} />
               <Route path="/trajeto" element={<ProtectedRoute><TrajetoPage /></ProtectedRoute>} />
