@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import PaymentPopup from "@/components/PaymentPopup";
 
 const ESTADOS_BR = [
   "AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT","PA",
@@ -18,6 +19,7 @@ const CompletarCadastroPage = () => {
   const [loading, setLoading] = useState(false);
   const [fotoFile, setFotoFile] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
+  const [showPayment, setShowPayment] = useState(false);
 
   const [dados, setDados] = useState({
     nome: "",
@@ -142,7 +144,7 @@ const CompletarCadastroPage = () => {
       if (contactError) throw contactError;
 
       toast.success("Cadastro completo! Bem-vinda ao Escudo Delas.");
-      navigate("/");
+      setShowPayment(true);
     } catch (err: any) {
       toast.error("Erro ao salvar: " + (err.message || "Tente novamente"));
     }
@@ -295,6 +297,7 @@ const CompletarCadastroPage = () => {
           )}
         </motion.button>
       </div>
+      <PaymentPopup open={showPayment} onClose={() => { setShowPayment(false); navigate("/"); }} />
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Users, AlertTriangle, MapPin, BarChart3, Trash2, Ban, CheckCircle2, LogOut, XCircle, Edit3, X, Save } from "lucide-react";
+import { Shield, Users, AlertTriangle, MapPin, BarChart3, Trash2, Ban, CheckCircle2, LogOut, XCircle, Edit3, X, Save, Key } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-type Tab = "dashboard" | "usuarios" | "alertas" | "incidentes";
+type Tab = "dashboard" | "usuarios" | "alertas" | "incidentes" | "config";
 
 const AdminPage = () => {
   const { signOut } = useAuth();
@@ -20,6 +20,8 @@ const AdminPage = () => {
   const [editingUser, setEditingUser] = useState<any | null>(null);
   const [editForm, setEditForm] = useState({ nome: "", email: "", telefone: "", cidade: "", estado: "" });
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [stripeKey, setStripeKey] = useState("");
+  const [stripeLoading, setStripeLoading] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
@@ -122,11 +124,35 @@ const AdminPage = () => {
     navigate("/login");
   };
 
+  const validateStripeKey = async () => {
+    if (!stripeKey.startsWith("sk_")) {
+      toast.error("A chave deve começar com sk_");
+      return;
+    }
+    setStripeLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("update-stripe-key", {
+        body: { stripe_key: stripeKey },
+      });
+      if (error) throw error;
+      if (data?.success) {
+        toast.success("Chave Stripe validada com sucesso!");
+        setStripeKey("");
+      } else {
+        toast.error(data?.error || "Erro ao validar chave");
+      }
+    } catch (err: any) {
+      toast.error("Erro ao validar chave Stripe");
+    }
+    setStripeLoading(false);
+  };
+
   const tabs: { key: Tab; label: string; icon: any }[] = [
     { key: "dashboard", label: "Dashboard", icon: BarChart3 },
     { key: "usuarios", label: "Usuárias", icon: Users },
     { key: "alertas", label: "Alertas", icon: AlertTriangle },
     { key: "incidentes", label: "Incidentes", icon: MapPin },
+    { key: "config", label: "Config", icon: Key },
   ];
 
   const formatDate = (d: string) => new Date(d).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
@@ -319,6 +345,37 @@ const AdminPage = () => {
                     </motion.button>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* Config */}
+            {tab === "config" && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-card shadow-card space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Key size={18} className="text-primary" />
+                    <h3 className="text-sm font-display text-foreground">Chave API Stripe</h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Insira sua chave secreta do Stripe (começa com <code className="bg-muted px-1 py-0.5 rounded text-[11px]">sk_</code>). Ela será validada antes de ser salva.
+                  </p>
+                  <input
+                    type="password"
+                    value={stripeKey}
+                    onChange={(e) => setStripeKey(e.target.value)}
+                    placeholder="sk_live_... ou sk_test_..."
+                    className="w-full px-4 py-3 rounded-xl bg-background border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-[3px] focus:ring-ring focus:border-primary"
+                  />
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={validateStripeKey}
+                    disabled={stripeLoading || !stripeKey}
+                    className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <Key size={16} />
+                    {stripeLoading ? "Validando..." : "Validar e Salvar Chave"}
+                  </motion.button>
+                </div>
               </div>
             )}
           </>
