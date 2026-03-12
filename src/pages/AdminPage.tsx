@@ -124,11 +124,35 @@ const AdminPage = () => {
     navigate("/login");
   };
 
+  const validateStripeKey = async () => {
+    if (!stripeKey.startsWith("sk_")) {
+      toast.error("A chave deve começar com sk_");
+      return;
+    }
+    setStripeLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("update-stripe-key", {
+        body: { stripe_key: stripeKey },
+      });
+      if (error) throw error;
+      if (data?.success) {
+        toast.success("Chave Stripe validada com sucesso!");
+        setStripeKey("");
+      } else {
+        toast.error(data?.error || "Erro ao validar chave");
+      }
+    } catch (err: any) {
+      toast.error("Erro ao validar chave Stripe");
+    }
+    setStripeLoading(false);
+  };
+
   const tabs: { key: Tab; label: string; icon: any }[] = [
     { key: "dashboard", label: "Dashboard", icon: BarChart3 },
     { key: "usuarios", label: "Usuárias", icon: Users },
     { key: "alertas", label: "Alertas", icon: AlertTriangle },
     { key: "incidentes", label: "Incidentes", icon: MapPin },
+    { key: "config", label: "Config", icon: Key },
   ];
 
   const formatDate = (d: string) => new Date(d).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
