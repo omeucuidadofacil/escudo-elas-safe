@@ -12,6 +12,7 @@ import OnboardingPage from "@/pages/OnboardingPage";
 import LoginPage from "@/pages/LoginPage";
 import CadastroPage from "@/pages/CadastroPage";
 import CompletarCadastroPage from "@/pages/CompletarCadastroPage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import PainelPage from "@/pages/PainelPage";
 import AdminPage from "@/pages/AdminPage";
 import NotFound from "@/pages/NotFound";
