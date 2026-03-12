@@ -155,6 +155,8 @@ const AdminPage = () => {
     { key: "usuarios", label: "Usuárias", icon: Users },
     { key: "alertas", label: "Alertas", icon: AlertTriangle },
     { key: "incidentes", label: "Incidentes", icon: MapPin },
+    { key: "planos", label: "Planos", icon: CreditCard },
+    { key: "apis", label: "APIs", icon: Code },
     { key: "config", label: "Config", icon: Key },
   ];
 
