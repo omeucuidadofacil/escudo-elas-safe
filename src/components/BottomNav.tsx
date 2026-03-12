@@ -2,6 +2,7 @@ import { Shield, Map, Navigation, Settings } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 const protectedPaths = ["/mapa", "/trajeto", "/config"];
 
