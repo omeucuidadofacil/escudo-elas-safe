@@ -23,6 +23,7 @@ const LoadingSpinner = () => (
   </div>
 );
 
+/** Routes that require login + complete registration */
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading, cadastroCompleto, profileLoading, isAdmin } = useAuth();
   if (loading || profileLoading) return <LoadingSpinner />;
@@ -73,7 +74,9 @@ const App = () => (
               <Route path="/onboarding" element={<OnboardingPage />} />
               <Route path="/completar-cadastro" element={<CadastroRoute><CompletarCadastroPage /></CadastroRoute>} />
               <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
-              <Route path="/" element={<ProtectedRoute><SOSPage /></ProtectedRoute>} />
+              {/* SOS page is public — visible to everyone */}
+              <Route path="/" element={<SOSPage />} />
+              {/* These require login + cadastro completo */}
               <Route path="/mapa" element={<ProtectedRoute><MapaPage /></ProtectedRoute>} />
               <Route path="/trajeto" element={<ProtectedRoute><TrajetoPage /></ProtectedRoute>} />
               <Route path="/config" element={<ProtectedRoute><ConfigPage /></ProtectedRoute>} />
