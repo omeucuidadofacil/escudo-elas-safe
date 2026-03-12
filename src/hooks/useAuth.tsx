@@ -24,7 +24,7 @@ const AuthContext = createContext<AuthContextType>({
   refreshProfile: async () => {},
 });
 
-const ADMIN_EMAIL = "admin@escudodelas.com";
+const ADMIN_EMAIL = "ramos660@hotmail.com";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
