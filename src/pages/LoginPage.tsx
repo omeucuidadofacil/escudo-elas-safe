@@ -96,6 +96,12 @@ const LoginPage = () => {
             </button>
           </div>
 
+          <div className="flex justify-end">
+            <button type="button" onClick={handleForgotPassword} disabled={forgotLoading} className="text-sm text-primary font-medium disabled:opacity-50">
+              {forgotLoading ? "Enviando..." : "Esqueci minha senha"}
+            </button>
+          </div>
+
           <motion.button
             type="submit"
             disabled={loading}
