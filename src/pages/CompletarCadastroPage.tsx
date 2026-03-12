@@ -144,7 +144,7 @@ const CompletarCadastroPage = () => {
       if (contactError) throw contactError;
 
       toast.success("Cadastro completo! Bem-vinda ao Escudo Delas.");
-      navigate("/");
+      setShowPayment(true);
     } catch (err: any) {
       toast.error("Erro ao salvar: " + (err.message || "Tente novamente"));
     }
