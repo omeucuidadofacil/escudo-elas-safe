@@ -347,6 +347,37 @@ const AdminPage = () => {
                 ))}
               </div>
             )}
+
+            {/* Config */}
+            {tab === "config" && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-card shadow-card space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Key size={18} className="text-primary" />
+                    <h3 className="text-sm font-display text-foreground">Chave API Stripe</h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Insira sua chave secreta do Stripe (começa com <code className="bg-muted px-1 py-0.5 rounded text-[11px]">sk_</code>). Ela será validada antes de ser salva.
+                  </p>
+                  <input
+                    type="password"
+                    value={stripeKey}
+                    onChange={(e) => setStripeKey(e.target.value)}
+                    placeholder="sk_live_... ou sk_test_..."
+                    className="w-full px-4 py-3 rounded-xl bg-background border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-[3px] focus:ring-ring focus:border-primary"
+                  />
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={validateStripeKey}
+                    disabled={stripeLoading || !stripeKey}
+                    className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <Key size={16} />
+                    {stripeLoading ? "Validando..." : "Validar e Salvar Chave"}
+                  </motion.button>
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
