@@ -20,6 +20,8 @@ const AdminPage = () => {
   const [editingUser, setEditingUser] = useState<any | null>(null);
   const [editForm, setEditForm] = useState({ nome: "", email: "", telefone: "", cidade: "", estado: "" });
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [stripeKey, setStripeKey] = useState("");
+  const [stripeLoading, setStripeLoading] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
