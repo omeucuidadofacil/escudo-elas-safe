@@ -80,6 +80,7 @@ const App = () => (
               {/* These require login + cadastro completo */}
               <Route path="/mapa" element={<ProtectedRoute><MapaPage /></ProtectedRoute>} />
               <Route path="/trajeto" element={<ProtectedRoute><TrajetoPage /></ProtectedRoute>} />
+              <Route path="/painel" element={<ProtectedRoute><PainelPage /></ProtectedRoute>} />
               <Route path="/config" element={<ProtectedRoute><ConfigPage /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
