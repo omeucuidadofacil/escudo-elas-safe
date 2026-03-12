@@ -297,6 +297,7 @@ const CompletarCadastroPage = () => {
           )}
         </motion.button>
       </div>
+      <PaymentPopup open={showPayment} onClose={() => { setShowPayment(false); navigate("/"); }} />
     </div>
   );
 };
