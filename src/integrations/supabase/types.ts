@@ -44,6 +44,36 @@ export type Database = {
         }
         Relationships: []
       }
+      api_keys: {
+        Row: {
+          ativo: boolean
+          chave: string
+          created_at: string
+          id: string
+          nome: string
+          servico: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          chave: string
+          created_at?: string
+          id?: string
+          nome: string
+          servico: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          chave?: string
+          created_at?: string
+          id?: string
+          nome?: string
+          servico?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contatos_emergencia: {
         Row: {
           created_at: string
@@ -122,6 +152,45 @@ export type Database = {
           latitude?: number
           longitude?: number
           user_id?: string
+        }
+        Relationships: []
+      }
+      planos: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          descricao: string | null
+          id: string
+          intervalo: string
+          nome: string
+          preco: number
+          stripe_price_id: string | null
+          stripe_product_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          intervalo?: string
+          nome: string
+          preco: number
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          intervalo?: string
+          nome?: string
+          preco?: number
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
