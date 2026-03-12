@@ -12,6 +12,25 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [forgotLoading, setForgotLoading] = useState(false);
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      toast.error("Digite seu email primeiro");
+      return;
+    }
+    setForgotLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Email de recuperação enviado! Verifique sua caixa de entrada.");
+    }
+    setForgotLoading(false);
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) return;
@@ -74,6 +93,12 @@ const LoginPage = () => {
               className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          <div className="flex justify-end">
+            <button type="button" onClick={handleForgotPassword} disabled={forgotLoading} className="text-sm text-primary font-medium disabled:opacity-50">
+              {forgotLoading ? "Enviando..." : "Esqueci minha senha"}
             </button>
           </div>
 

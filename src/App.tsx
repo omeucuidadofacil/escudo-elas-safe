@@ -12,6 +12,7 @@ import OnboardingPage from "@/pages/OnboardingPage";
 import LoginPage from "@/pages/LoginPage";
 import CadastroPage from "@/pages/CadastroPage";
 import CompletarCadastroPage from "@/pages/CompletarCadastroPage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import PainelPage from "@/pages/PainelPage";
 import AdminPage from "@/pages/AdminPage";
 import NotFound from "@/pages/NotFound";
@@ -73,6 +74,7 @@ const App = () => (
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
               <Route path="/cadastro" element={<PublicRoute><CadastroPage /></PublicRoute>} />
               <Route path="/onboarding" element={<OnboardingPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="/completar-cadastro" element={<CadastroRoute><CompletarCadastroPage /></CadastroRoute>} />
               <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
               {/* SOS page is public — visible to everyone */}
