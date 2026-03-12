@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2 } from "lucide-react";
+import { Volume2, Shield, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SOSButton from "@/components/SOSButton";
 import { supabase } from "@/integrations/supabase/client";
@@ -95,6 +95,25 @@ const SOSPage = () => {
           />
         )}
       </AnimatePresence>
+
+      {/* Banner de cadastro para visitantes */}
+      {!user && !isAlertActive && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mx-5 mt-2 p-3 rounded-xl bg-accent border border-primary/15 flex items-center gap-3 cursor-pointer"
+          onClick={() => navigate("/cadastro")}
+        >
+          <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center flex-shrink-0">
+            <Shield className="w-4 h-4 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-medium text-foreground">Cadastre-se para sua proteção</p>
+            <p className="text-[11px] text-muted-foreground">Ative alertas, compartilhe localização e mais</p>
+          </div>
+          <ChevronRight size={16} className="text-muted-foreground flex-shrink-0" />
+        </motion.div>
+      )}
 
       <header className="flex items-center justify-between px-5 pt-[env(safe-area-inset-top)] mt-4">
         <div>
