@@ -2,26 +2,69 @@ import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import SOSButton from "@/components/SOSButton";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
 const SOSPage = () => {
+  const { user } = useAuth();
   const [isAlertActive, setIsAlertActive] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
 
-  const handleActivate = useCallback(() => {
-    // Flash red
+  const handleActivate = useCallback(async () => {
     setShowFlash(true);
     setTimeout(() => setShowFlash(false), 200);
     setIsAlertActive(true);
-    toast.success("Alerta ativado. Contatos notificados.", {
-      duration: 5000,
-    });
-  }, []);
 
-  const handleCancel = useCallback(() => {
+    // Get location and save alert
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          await supabase.from("alertas").insert({
+            user_id: user!.id,
+            tipo_alerta: "sos",
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+            status: "ativo",
+          });
+          // Save real-time location
+          await supabase.from("localizacao_tempo_real").insert({
+            user_id: user!.id,
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+          });
+        },
+        () => {
+          // Save alert without location
+          supabase.from("alertas").insert({
+            user_id: user!.id,
+            tipo_alerta: "sos",
+            status: "ativo",
+          });
+        }
+      );
+    }
+
+    toast.success("Alerta ativado. Contatos notificados.", { duration: 5000 });
+  }, [user]);
+
+  const handleCancel = useCallback(async () => {
     setIsAlertActive(false);
+    // Update latest alert status
+    if (user) {
+      const { data } = await supabase
+        .from("alertas")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("status", "ativo")
+        .order("created_at", { ascending: false })
+        .limit(1);
+      if (data && data.length > 0) {
+        await supabase.from("alertas").update({ status: "cancelado" }).eq("id", data[0].id);
+      }
+    }
     toast.info("Alerta cancelado.");
-  }, []);
+  }, [user]);
 
   return (
     <div
@@ -29,7 +72,6 @@ const SOSPage = () => {
         isAlertActive ? "bg-alert text-alert-foreground" : "bg-background"
       }`}
     >
-      {/* Red flash overlay */}
       <AnimatePresence>
         {showFlash && (
           <motion.div
@@ -42,7 +84,6 @@ const SOSPage = () => {
         )}
       </AnimatePresence>
 
-      {/* Header */}
       <header className="flex items-center justify-between px-5 pt-[env(safe-area-inset-top)] mt-4">
         <div>
           <h1 className="text-lg font-display text-foreground">
@@ -61,14 +102,12 @@ const SOSPage = () => {
         )}
       </header>
 
-      {/* SOS Button Area */}
       <SOSButton
         onActivate={handleActivate}
         onCancel={handleCancel}
         isActive={isAlertActive}
       />
 
-      {/* Silent activation hint */}
       {!isAlertActive && (
         <div className="px-6 pb-6 flex justify-center">
           <button className="flex items-center gap-2 px-4 py-3 rounded-xl bg-muted text-muted-foreground text-sm">
