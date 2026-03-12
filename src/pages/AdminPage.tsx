@@ -353,6 +353,12 @@ const AdminPage = () => {
               </div>
             )}
 
+            {/* Planos */}
+            {tab === "planos" && <PlanosTab />}
+
+            {/* APIs */}
+            {tab === "apis" && <ApiKeysTab />}
+
             {/* Config */}
             {tab === "config" && (
               <div className="space-y-4">
