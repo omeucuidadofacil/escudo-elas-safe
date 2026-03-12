@@ -19,6 +19,7 @@ const CompletarCadastroPage = () => {
   const [loading, setLoading] = useState(false);
   const [fotoFile, setFotoFile] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
+  const [showPayment, setShowPayment] = useState(false);
 
   const [dados, setDados] = useState({
     nome: "",
