@@ -12,6 +12,7 @@ import OnboardingPage from "@/pages/OnboardingPage";
 import LoginPage from "@/pages/LoginPage";
 import CadastroPage from "@/pages/CadastroPage";
 import CompletarCadastroPage from "@/pages/CompletarCadastroPage";
+import PainelPage from "@/pages/PainelPage";
 import AdminPage from "@/pages/AdminPage";
 import NotFound from "@/pages/NotFound";
 
@@ -79,6 +80,7 @@ const App = () => (
               {/* These require login + cadastro completo */}
               <Route path="/mapa" element={<ProtectedRoute><MapaPage /></ProtectedRoute>} />
               <Route path="/trajeto" element={<ProtectedRoute><TrajetoPage /></ProtectedRoute>} />
+              <Route path="/painel" element={<ProtectedRoute><PainelPage /></ProtectedRoute>} />
               <Route path="/config" element={<ProtectedRoute><ConfigPage /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>

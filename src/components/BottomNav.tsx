@@ -1,15 +1,16 @@
-import { Shield, Map, Navigation, Settings } from "lucide-react";
+import { Shield, Map, Navigation, Settings, LayoutDashboard } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
-const protectedPaths = ["/mapa", "/trajeto", "/config"];
+const protectedPaths = ["/mapa", "/trajeto", "/config", "/painel"];
 
 const tabs = [
   { path: "/", icon: Shield, label: "SOS" },
   { path: "/mapa", icon: Map, label: "Mapa" },
   { path: "/trajeto", icon: Navigation, label: "Trajeto" },
+  { path: "/painel", icon: LayoutDashboard, label: "Painel" },
   { path: "/config", icon: Settings, label: "Config" },
 ];
 
