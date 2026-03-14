@@ -11,6 +11,7 @@ interface Contact {
   nome: string;
   telefone: string;
   relacao: string;
+  telegram_chat_id: string;
 }
 
 const ConfigPage = () => {
