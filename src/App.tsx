@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import BottomNav from "@/components/BottomNav";
+import Index from "@/pages/Index";
 import SOSPage from "@/pages/SOSPage";
 import MapaPage from "@/pages/MapaPage";
 import TrajetoPage from "@/pages/TrajetoPage";
