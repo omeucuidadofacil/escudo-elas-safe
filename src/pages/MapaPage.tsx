@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, AlertTriangle, Eye, Plus } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import PaymentPopup from "@/components/PaymentPopup";
 
 type IncidentType = "agressao" | "assedio" | "suspeito" | "stalking";
 
