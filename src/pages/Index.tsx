@@ -76,8 +76,8 @@ const Index = () => {
               onClick={() => navigate("/sos")}
               className="p-5 rounded-2xl bg-card shadow-card flex flex-col items-center gap-3"
             >
-              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                <PhoneOff size={24} className="text-blue-500" />
+              <div className="w-12 h-12 rounded-xl bg-accent/60 flex items-center justify-center">
+                <PhoneOff size={24} className="text-primary" />
               </div>
               <span className="text-sm font-semibold text-foreground">Chamada Falsa</span>
             </motion.button>
