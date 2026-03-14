@@ -19,7 +19,7 @@ const ConfigPage = () => {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newContact, setNewContact] = useState({ nome: "", telefone: "", relacao: "" });
+  const [newContact, setNewContact] = useState({ nome: "", telefone: "", relacao: "", telegram_chat_id: "" });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
