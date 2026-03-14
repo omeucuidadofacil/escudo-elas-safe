@@ -139,6 +139,13 @@ const ConfigPage = () => {
                       onChange={(e) => setNewContact({ ...newContact, relacao: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl bg-background border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-[3px] focus:ring-ring focus:border-primary"
                     />
+                    <input
+                      type="text"
+                      placeholder="Telegram Chat ID (envie /start ao @valkyra_sos_bot)"
+                      value={newContact.telegram_chat_id}
+                      onChange={(e) => setNewContact({ ...newContact, telegram_chat_id: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-background border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-[3px] focus:ring-ring focus:border-primary"
+                    />
                     <div className="flex gap-2">
                       <motion.button
                         whileTap={{ scale: 0.95 }}
