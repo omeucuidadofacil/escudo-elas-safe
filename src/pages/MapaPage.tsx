@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, AlertTriangle, Eye, Plus } from "lucide-react";
 
-type IncidentType = "agressao" | "assedio" | "suspeito";
+type IncidentType = "agressao" | "assedio" | "suspeito" | "stalking";
 
 interface Incident {
   id: string;
@@ -16,12 +16,14 @@ const incidentConfig: Record<IncidentType, { label: string; color: string; bgCla
   agressao: { label: "Agressão", color: "text-destructive", bgClass: "bg-destructive/10" },
   assedio: { label: "Assédio", color: "text-warning", bgClass: "bg-warning/10" },
   suspeito: { label: "Suspeito", color: "text-caution", bgClass: "bg-caution/10" },
+  stalking: { label: "Stalking", color: "text-primary", bgClass: "bg-primary/10" },
 };
 
 const mockIncidents: Incident[] = [
   { id: "1", type: "assedio", description: "Assédio verbal na Av. Paulista", time: "2h atrás", distance: "300m" },
   { id: "2", type: "agressao", description: "Tentativa de agressão na Rua Augusta", time: "5h atrás", distance: "1.2km" },
   { id: "3", type: "suspeito", description: "Comportamento suspeito na praça", time: "1d atrás", distance: "800m" },
+  { id: "4", type: "stalking", description: "Perseguição constante no trajeto casa-trabalho", time: "3h atrás", distance: "500m" },
 ];
 
 const MapaPage = () => {
@@ -43,6 +45,7 @@ const MapaPage = () => {
         <div className="absolute top-1/4 left-1/3 w-4 h-4 rounded-full bg-destructive shadow-elevated" />
         <div className="absolute top-1/2 right-1/4 w-4 h-4 rounded-full bg-warning shadow-elevated" />
         <div className="absolute bottom-1/3 left-1/2 w-4 h-4 rounded-full bg-caution shadow-elevated" />
+        <div className="absolute top-1/3 right-1/3 w-4 h-4 rounded-full bg-primary shadow-elevated" />
       </div>
 
       {/* Filters */}
@@ -52,6 +55,7 @@ const MapaPage = () => {
           { key: "agressao" as const, label: "Agressão" },
           { key: "assedio" as const, label: "Assédio" },
           { key: "suspeito" as const, label: "Suspeito" },
+          { key: "stalking" as const, label: "Stalking" },
         ].map((f) => (
           <motion.button
             key={f.key}
