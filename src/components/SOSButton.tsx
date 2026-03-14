@@ -59,13 +59,17 @@ const SOSButton = ({ onActivate, onCancel, isActive }: SOSButtonProps) => {
             transition={{ type: "spring", duration: 0.3, bounce: 0 }}
             className="relative flex items-center justify-center"
           >
-            {/* Pulse rings */}
-            {isHolding && (
-              <>
-                <div className="absolute w-64 h-64 rounded-full bg-primary/10 animate-pulse-ring" />
-                <div className="absolute w-64 h-64 rounded-full bg-primary/10 animate-pulse-ring [animation-delay:0.5s]" />
-              </>
-            )}
+            {/* Pulse rings - always visible */}
+            <motion.div
+              className="absolute w-64 h-64 rounded-full border-2 border-primary/30"
+              animate={{ scale: [1, 1.3], opacity: [0.6, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }}
+            />
+            <motion.div
+              className="absolute w-64 h-64 rounded-full border-2 border-primary/20"
+              animate={{ scale: [1, 1.3], opacity: [0.4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
+            />
 
             {/* Progress circle */}
             <svg className="absolute w-64 h-64 -rotate-90" viewBox="0 0 260 260">
