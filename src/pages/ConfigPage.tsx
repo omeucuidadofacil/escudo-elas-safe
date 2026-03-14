@@ -188,6 +188,16 @@ const ConfigPage = () => {
                 key={i}
                 href={`tel:${service.number}`}
                 whileTap={{ scale: 0.95 }}
+                onClick={(e) => {
+                  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                  if (!isMobile) {
+                    e.preventDefault();
+                    toast.info(`Ligue para ${service.label}: ${service.number}`, {
+                      description: "Disque este número no seu telefone.",
+                      duration: 5000,
+                    });
+                  }
+                }}
                 className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card shadow-card text-center"
               >
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center ${service.color}`}>
