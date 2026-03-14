@@ -50,7 +50,7 @@ const ConfigPage = () => {
       return;
     }
     setContacts([...contacts, data]);
-    setNewContact({ nome: "", telefone: "", relacao: "" });
+    setNewContact({ nome: "", telefone: "", relacao: "", telegram_chat_id: "" });
     setShowAddForm(false);
     toast.success("Contato adicionado!");
   };
