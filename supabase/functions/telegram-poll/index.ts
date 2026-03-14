@@ -1,8 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/telegram';
-const MAX_RUNTIME_MS = 55_000;
-const MIN_REMAINING_MS = 5_000;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,41 +12,41 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const startTime = Date.now();
+  try {
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      return new Response(JSON.stringify({ error: 'LOVABLE_API_KEY not configured' }), {
+        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
-  const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-  if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
+    const TELEGRAM_API_KEY = Deno.env.get('TELEGRAM_API_KEY');
+    if (!TELEGRAM_API_KEY) {
+      return new Response(JSON.stringify({ error: 'TELEGRAM_API_KEY not configured' }), {
+        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
-  const TELEGRAM_API_KEY = Deno.env.get('TELEGRAM_API_KEY');
-  if (!TELEGRAM_API_KEY) throw new Error('TELEGRAM_API_KEY is not configured');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-  const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-  const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Read offset
+    const { data: state, error: stateErr } = await supabase
+      .from('telegram_bot_state')
+      .select('update_offset')
+      .eq('id', 1)
+      .single();
 
-  let totalProcessed = 0;
+    if (stateErr) {
+      return new Response(JSON.stringify({ error: 'state_read_error', detail: stateErr.message }), {
+        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
-  // Read initial offset
-  const { data: state, error: stateErr } = await supabase
-    .from('telegram_bot_state')
-    .select('update_offset')
-    .eq('id', 1)
-    .single();
+    const currentOffset = state.update_offset;
 
-  if (stateErr) {
-    return new Response(JSON.stringify({ error: stateErr.message }), { status: 500 });
-  }
-
-  let currentOffset = state.update_offset;
-
-  while (true) {
-    const elapsed = Date.now() - startTime;
-    const remainingMs = MAX_RUNTIME_MS - elapsed;
-    if (remainingMs < MIN_REMAINING_MS) break;
-
-    const timeout = Math.min(50, Math.floor(remainingMs / 1000) - 5);
-    if (timeout < 1) break;
-
+    // Single poll with short timeout
     const response = await fetch(`${GATEWAY_URL}/getUpdates`, {
       method: 'POST',
       headers: {
@@ -58,50 +56,36 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         offset: currentOffset,
-        timeout,
+        timeout: 2,
         allowed_updates: ['message'],
       }),
     });
 
     const data = await response.json();
+
     if (!response.ok) {
-      return new Response(JSON.stringify({ error: data }), { status: 502 });
+      return new Response(JSON.stringify({ error: 'telegram_error', status: response.status, detail: data }), {
+        status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const updates = data.result ?? [];
-    if (updates.length === 0) continue;
+    let sent = 0;
+    const replies: string[] = [];
 
-    // Store messages
-    const rows = updates
-      .filter((u: any) => u.message)
-      .map((u: any) => ({
-        update_id: u.update_id,
-        chat_id: u.message.chat.id,
-        text: u.message.text ?? null,
-        raw_update: u,
-      }));
-
-    if (rows.length > 0) {
-      await supabase
-        .from('telegram_messages')
-        .upsert(rows, { onConflict: 'update_id' });
-
-      totalProcessed += rows.length;
-    }
-
-    // Handle /start commands — reply with chat_id
     for (const update of updates) {
+      // Handle /start
       if (update.message?.text?.trim() === '/start') {
         const chatId = update.message.chat.id;
         const firstName = update.message.from?.first_name || '';
-        
+
         const replyText =
           `👋 Olá${firstName ? `, ${firstName}` : ''}! Eu sou o bot da *Valkyra*.\n\n` +
           `🔑 Seu *Chat ID* é:\n\`${chatId}\`\n\n` +
           `📋 Copie esse número e cole no campo "Telegram Chat ID" nas configurações do app Valkyra.\n\n` +
           `Assim, quando alguém ativar um alerta SOS, você receberá a notificação aqui! 🛡️`;
 
-        await fetch(`${GATEWAY_URL}/sendMessage`, {
+        const sendResp = await fetch(`${GATEWAY_URL}/sendMessage`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${LOVABLE_API_KEY}`,
@@ -114,18 +98,44 @@ Deno.serve(async (req) => {
             parse_mode: 'Markdown',
           }),
         });
+
+        const sendData = await sendResp.json();
+        replies.push(`chat_id=${chatId} ok=${sendResp.ok}`);
+        if (sendResp.ok) sent++;
+      }
+
+      // Store message
+      if (update.message) {
+        await supabase.from('telegram_messages').upsert({
+          update_id: update.update_id,
+          chat_id: update.message.chat.id,
+          text: update.message.text ?? null,
+          raw_update: update,
+        }, { onConflict: 'update_id' });
       }
     }
 
     // Advance offset
-    const newOffset = Math.max(...updates.map((u: any) => u.update_id)) + 1;
-    await supabase
-      .from('telegram_bot_state')
-      .update({ update_offset: newOffset, updated_at: new Date().toISOString() })
-      .eq('id', 1);
+    if (updates.length > 0) {
+      const newOffset = Math.max(...updates.map((u: any) => u.update_id)) + 1;
+      await supabase
+        .from('telegram_bot_state')
+        .update({ update_offset: newOffset, updated_at: new Date().toISOString() })
+        .eq('id', 1);
+    }
 
-    currentOffset = newOffset;
+    return new Response(JSON.stringify({
+      ok: true,
+      offset: currentOffset,
+      updates_count: updates.length,
+      sent,
+      replies,
+    }), {
+      status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err instanceof Error ? err.message : 'Unknown' }), {
+      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
-
-  return new Response(JSON.stringify({ ok: true, processed: totalProcessed, finalOffset: currentOffset }));
 });
