@@ -16,6 +16,7 @@ import CompletarCadastroPage from "@/pages/CompletarCadastroPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import PainelPage from "@/pages/PainelPage";
 import AdminPage from "@/pages/AdminPage";
+import AjudaPage from "@/pages/AjudaPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -86,6 +87,7 @@ const App = () => (
                   <Route path="/trajeto" element={<ProtectedRoute><TrajetoPage /></ProtectedRoute>} />
                   <Route path="/painel" element={<ProtectedRoute><PainelPage /></ProtectedRoute>} />
                   <Route path="/config" element={<ProtectedRoute><ConfigPage /></ProtectedRoute>} />
+                  <Route path="/ajuda" element={<ProtectedRoute><AjudaPage /></ProtectedRoute>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <BottomNav />

@@ -216,11 +216,12 @@ const ConfigPage = () => {
             { icon: Bell, label: "Notificações" },
             { icon: Lock, label: "Privacidade e Segurança" },
             { icon: Phone, label: "Ativação Silenciosa" },
-            { icon: HelpCircle, label: "Ajuda" },
+            { icon: HelpCircle, label: "Como usar o app", action: () => navigate("/ajuda") },
           ].map((item, i) => (
             <motion.button
               key={i}
               whileTap={{ scale: 0.98 }}
+              onClick={item.action}
               className="flex items-center gap-3 w-full p-4 rounded-xl hover:bg-muted/50 transition-colors touch-target"
             >
               <item.icon size={20} className="text-muted-foreground" />
