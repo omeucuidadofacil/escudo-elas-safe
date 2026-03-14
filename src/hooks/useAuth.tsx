@@ -22,6 +22,8 @@ const AuthContext = createContext<AuthContextType>({
   isAdmin: false,
   cadastroCompleto: false,
   profileLoading: true,
+  subscribed: false,
+  subscriptionLoading: true,
   signOut: async () => {},
   refreshProfile: async () => {},
 });
