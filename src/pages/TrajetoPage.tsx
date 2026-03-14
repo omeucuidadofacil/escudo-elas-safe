@@ -16,6 +16,19 @@ const TrajetoPage = () => {
     setIsMonitoring(true);
   };
 
+  if (!subscriptionLoading && !subscribed) {
+    return (
+      <div className="min-h-svh flex flex-col pb-20 bg-background relative">
+        <div className="flex-1 filter blur-sm pointer-events-none opacity-50">
+          <div className="px-5 pt-[env(safe-area-inset-top)] mt-4 mb-4">
+            <h1 className="text-xl font-display">Monitoramento de Trajeto</h1>
+          </div>
+        </div>
+        <PaymentPopup open={true} onClose={() => navigate("/")} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-svh flex flex-col pb-20 bg-background">
       {/* Header */}
