@@ -16,6 +16,7 @@ import CompletarCadastroPage from "@/pages/CompletarCadastroPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import PainelPage from "@/pages/PainelPage";
 import AdminPage from "@/pages/AdminPage";
+import AjudaPage from "@/pages/AjudaPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
