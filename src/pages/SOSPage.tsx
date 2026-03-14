@@ -140,7 +140,7 @@ const SOSPage = () => {
                 </motion.div>
               </div>
               <div>
-                <h1 className="text-lg font-display text-foreground">Elara</h1>
+                <h1 className="text-lg font-display text-foreground">Valkyra</h1>
                 <span className="text-xs text-muted-foreground">O Escudo Delas</span>
               </div>
             </div>

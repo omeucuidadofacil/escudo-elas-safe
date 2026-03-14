@@ -155,7 +155,7 @@ const AdminPage = () => {
             <Shield size={20} className="text-white" />
           </div>
           <div>
-            <p className="font-bold text-white text-sm">Elara</p>
+            <p className="font-bold text-white text-sm">Valkyra</p>
             <p className="text-[11px] text-sidebar-foreground/60">O Escudo Delas</p>
           </div>
         </div>
