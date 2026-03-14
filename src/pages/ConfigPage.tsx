@@ -11,6 +11,7 @@ interface Contact {
   nome: string;
   telefone: string;
   relacao: string;
+  telegram_chat_id: string;
 }
 
 const ConfigPage = () => {
@@ -18,7 +19,7 @@ const ConfigPage = () => {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newContact, setNewContact] = useState({ nome: "", telefone: "", relacao: "" });
+  const [newContact, setNewContact] = useState({ nome: "", telefone: "", relacao: "", telegram_chat_id: "" });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const ConfigPage = () => {
     const fetchContacts = async () => {
       const { data, error } = await supabase
         .from("contatos_emergencia")
-        .select("id, nome, telefone, relacao")
+        .select("id, nome, telefone, relacao, telegram_chat_id")
         .order("created_at", { ascending: true });
       if (!error && data) setContacts(data);
       setLoading(false);
@@ -41,7 +42,7 @@ const ConfigPage = () => {
     const { data, error } = await supabase
       .from("contatos_emergencia")
       .insert({ ...newContact, user_id: user!.id })
-      .select("id, nome, telefone, relacao")
+      .select("id, nome, telefone, relacao, telegram_chat_id")
       .single();
 
     if (error) {
@@ -49,7 +50,7 @@ const ConfigPage = () => {
       return;
     }
     setContacts([...contacts, data]);
-    setNewContact({ nome: "", telefone: "", relacao: "" });
+    setNewContact({ nome: "", telefone: "", relacao: "", telegram_chat_id: "" });
     setShowAddForm(false);
     toast.success("Contato adicionado!");
   };
@@ -136,6 +137,13 @@ const ConfigPage = () => {
                       placeholder="Relação (ex: Mãe, Amiga)"
                       value={newContact.relacao}
                       onChange={(e) => setNewContact({ ...newContact, relacao: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-background border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-[3px] focus:ring-ring focus:border-primary"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Telegram Chat ID (envie /start ao @valkyra_sos_bot)"
+                      value={newContact.telegram_chat_id}
+                      onChange={(e) => setNewContact({ ...newContact, telegram_chat_id: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl bg-background border border-input text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-[3px] focus:ring-ring focus:border-primary"
                     />
                     <div className="flex gap-2">

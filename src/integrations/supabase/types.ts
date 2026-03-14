@@ -77,26 +77,32 @@ export type Database = {
       contatos_emergencia: {
         Row: {
           created_at: string
+          email: string | null
           id: string
           nome: string
           relacao: string | null
           telefone: string
+          telegram_chat_id: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
+          email?: string | null
           id?: string
           nome: string
           relacao?: string | null
           telefone: string
+          telegram_chat_id?: string | null
           user_id: string
         }
         Update: {
           created_at?: string
+          email?: string | null
           id?: string
           nome?: string
           relacao?: string | null
           telefone?: string
+          telegram_chat_id?: string | null
           user_id?: string
         }
         Relationships: []
