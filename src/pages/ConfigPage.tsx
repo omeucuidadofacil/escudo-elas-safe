@@ -221,6 +221,7 @@ const ConfigPage = () => {
             <motion.button
               key={i}
               whileTap={{ scale: 0.98 }}
+              onClick={item.action}
               className="flex items-center gap-3 w-full p-4 rounded-xl hover:bg-muted/50 transition-colors touch-target"
             >
               <item.icon size={20} className="text-muted-foreground" />
