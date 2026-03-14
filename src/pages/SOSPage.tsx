@@ -120,6 +120,13 @@ const SOSPage = () => {
         <div>
           {!isAlertActive && (
             <div className="flex items-center gap-2">
+              <motion.img
+                src={logoElara}
+                alt="Elara"
+                className="w-8 h-8 object-contain"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.85, 1, 0.85] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
               <h1 className="text-lg font-display text-foreground">Elara</h1>
               <span className="text-xs text-muted-foreground">O Escudo Delas</span>
             </div>
