@@ -33,30 +33,41 @@ const SOSPage = () => {
     setTimeout(() => setShowFlash(false), 200);
     setIsAlertActive(true);
 
+    let latitude: number | undefined;
+    let longitude: number | undefined;
+
+    const sendAlert = async (lat?: number, lng?: number) => {
+      await supabase.from("alertas").insert({
+        user_id: user!.id,
+        tipo_alerta: "sos",
+        latitude: lat,
+        longitude: lng,
+        status: "ativo",
+      });
+      if (lat && lng) {
+        await supabase.from("localizacao_tempo_real").insert({
+          user_id: user!.id,
+          latitude: lat,
+          longitude: lng,
+        });
+      }
+      // Send Telegram notifications
+      try {
+        await supabase.functions.invoke("send-sos-alert", {
+          body: { user_id: user!.id, latitude: lat, longitude: lng },
+        });
+      } catch (e) {
+        console.error("Error sending SOS alert notifications:", e);
+      }
+    };
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          await supabase.from("alertas").insert({
-            user_id: user!.id,
-            tipo_alerta: "sos",
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-            status: "ativo",
-          });
-          await supabase.from("localizacao_tempo_real").insert({
-            user_id: user!.id,
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-          });
-        },
-        () => {
-          supabase.from("alertas").insert({
-            user_id: user!.id,
-            tipo_alerta: "sos",
-            status: "ativo",
-          });
-        }
+        (pos) => sendAlert(pos.coords.latitude, pos.coords.longitude),
+        () => sendAlert()
       );
+    } else {
+      await sendAlert();
     }
 
     toast.success("Alerta ativado. Contatos notificados.", { duration: 5000 });
