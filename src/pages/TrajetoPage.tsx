@@ -1,10 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navigation, MapPin, Clock, Shield, CheckCircle2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import PaymentPopup from "@/components/PaymentPopup";
 
 const TrajetoPage = () => {
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [destination, setDestination] = useState("");
+  const { subscribed, subscriptionLoading } = useAuth();
+  const navigate = useNavigate();
 
   const startMonitoring = () => {
     if (!destination.trim()) return;
