@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Shield, VolumeX, PhoneOff, Bell, ChevronRight, CheckCircle2, MapPin, UserPlus } from "lucide-react";
+import { Shield, VolumeX, PhoneOff, Bell, ChevronRight, CheckCircle2, MapPin, UserPlus, Users } from "lucide-react";
 import logoElara from "@/assets/logo-elara.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
