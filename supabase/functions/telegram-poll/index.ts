@@ -82,8 +82,9 @@ Deno.serve(async (req) => {
     for (const update of updates) {
       console.log(`[telegram-poll] Processing update_id=${update.update_id}, text="${update.message?.text}"`);
 
-      // Handle /start
-      if (update.message?.text?.trim() === '/start') {
+      // Handle /start or "começar" variants
+      const msgText = (update.message?.text ?? '').trim().toLowerCase().replace(/[\/]/g, '');
+      if (msgText === 'start' || msgText === 'começar' || msgText === 'comecar') {
         const chatId = update.message.chat.id;
         const firstName = update.message.from?.first_name || '';
 
