@@ -52,7 +52,7 @@ const Index = () => {
             </motion.div>
           </div>
           <div>
-            <span className="text-base font-bold text-primary">Elara</span>
+            <span className="text-base font-bold text-primary">Valkyra</span>
             <span className="text-xs text-muted-foreground ml-1.5">O Escudo Delas</span>
           </div>
         </div>

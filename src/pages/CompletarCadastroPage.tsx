@@ -143,7 +143,7 @@ const CompletarCadastroPage = () => {
 
       if (contactError) throw contactError;
 
-      toast.success("Cadastro completo! Bem-vinda ao Elara.");
+      toast.success("Cadastro completo! Bem-vinda ao Valkyra.");
       setShowPayment(true);
     } catch (err: any) {
       toast.error("Erro ao salvar: " + (err.message || "Tente novamente"));
