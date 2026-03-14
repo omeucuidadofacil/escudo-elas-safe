@@ -31,16 +31,30 @@ const Index = () => {
     <div className="min-h-svh flex flex-col pb-20 bg-background">
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-[env(safe-area-inset-top)] mt-4">
-        <div className="flex items-center gap-2">
-          <motion.img
-            src={logoElara}
-            alt="Elara"
-            className="w-8 h-8 object-contain"
-            animate={{ scale: [1, 1.1, 1], opacity: [0.85, 1, 0.85] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <span className="text-base font-bold text-primary">Elara</span>
-          <span className="text-xs text-muted-foreground">O Escudo Delas</span>
+        <div className="flex items-center gap-3">
+          <div className="relative flex items-center justify-center">
+            <motion.div
+              className="absolute w-10 h-10 rounded-full border border-primary/30"
+              animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }}
+            />
+            <motion.div
+              className="absolute w-10 h-10 rounded-full border border-primary/20"
+              animate={{ scale: [1, 1.4], opacity: [0.3, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
+            />
+            <motion.div
+              className="w-9 h-9 rounded-full bg-primary flex items-center justify-center"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Shield className="w-4 h-4 text-primary-foreground" strokeWidth={2.5} />
+            </motion.div>
+          </div>
+          <div>
+            <span className="text-base font-bold text-primary">Elara</span>
+            <span className="text-xs text-muted-foreground ml-1.5">O Escudo Delas</span>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <button className="w-9 h-9 rounded-full bg-accent flex items-center justify-center">
