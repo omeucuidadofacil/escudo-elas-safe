@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Shield, VolumeX, PhoneOff, Bell, ChevronRight, CheckCircle2, MapPin, UserPlus } from "lucide-react";
+import logoElara from "@/assets/logo-elara.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,7 +32,7 @@ const Index = () => {
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-[env(safe-area-inset-top)] mt-4">
         <div className="flex items-center gap-2">
-          <Shield className="w-6 h-6 text-primary" />
+          <img src={logoElara} alt="Elara" className="w-8 h-8 object-contain" />
           <span className="text-base font-bold text-primary">Elara</span>
           <span className="text-xs text-muted-foreground">O Escudo Delas</span>
         </div>
