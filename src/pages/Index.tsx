@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Shield, VolumeX, PhoneOff, Bell, ChevronRight, CheckCircle2, MapPin, UserPlus } from "lucide-react";
+import { Shield, VolumeX, PhoneOff, Bell, ChevronRight, CheckCircle2, MapPin, UserPlus, Users } from "lucide-react";
 import logoElara from "@/assets/logo-elara.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -78,6 +78,35 @@ const Index = () => {
             {user ? "Sua proteção está ativa e monitorada." : "Cadastre-se para ativar sua proteção."}
           </p>
         </div>
+
+        {/* Users Counter */}
+        <motion.div
+          className="flex items-center gap-3 p-4 rounded-2xl bg-card shadow-card"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="relative flex items-center justify-center">
+            <motion.div
+              className="absolute w-10 h-10 rounded-full bg-primary/20"
+              animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+            />
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <Users size={18} className="text-primary" />
+            </div>
+          </div>
+          <div>
+            <motion.p
+              className="text-xl font-bold text-primary"
+              animate={{ opacity: [1, 0.6, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              +7.800
+            </motion.p>
+            <p className="text-xs text-muted-foreground">usuárias protegidas pelo Valkyra</p>
+          </div>
+        </motion.div>
 
         {/* Quick Actions */}
         <div>
