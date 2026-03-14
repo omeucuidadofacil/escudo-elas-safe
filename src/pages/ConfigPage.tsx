@@ -27,7 +27,7 @@ const ConfigPage = () => {
     const fetchContacts = async () => {
       const { data, error } = await supabase
         .from("contatos_emergencia")
-        .select("id, nome, telefone, relacao")
+        .select("id, nome, telefone, relacao, telegram_chat_id")
         .order("created_at", { ascending: true });
       if (!error && data) setContacts(data);
       setLoading(false);
