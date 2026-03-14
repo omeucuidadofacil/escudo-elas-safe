@@ -9,6 +9,8 @@ interface AuthContextType {
   isAdmin: boolean;
   cadastroCompleto: boolean;
   profileLoading: boolean;
+  subscribed: boolean;
+  subscriptionLoading: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
