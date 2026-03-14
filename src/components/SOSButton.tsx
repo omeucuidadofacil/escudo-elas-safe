@@ -97,8 +97,20 @@ const SOSButton = ({ onActivate, onCancel, isActive }: SOSButtonProps) => {
               onPointerUp={endHold}
               onPointerLeave={endHold}
               onContextMenu={(e) => e.preventDefault()}
+              animate={{
+                scale: [1, 1.05, 1],
+                boxShadow: [
+                  "0 0 0 0 hsl(270 60% 55% / 0.4)",
+                  "0 0 0 20px hsl(270 60% 55% / 0)",
+                  "0 0 0 0 hsl(270 60% 55% / 0)",
+                ],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
               whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", duration: 0.2, bounce: 0 }}
               className="relative z-10 w-56 h-56 rounded-full bg-primary flex flex-col items-center justify-center select-none touch-none shadow-elevated"
             >
               <Shield className="w-12 h-12 text-primary-foreground mb-2" strokeWidth={2.5} />
