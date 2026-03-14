@@ -55,6 +55,7 @@ const MapaPage = () => {
           { key: "agressao" as const, label: "Agressão" },
           { key: "assedio" as const, label: "Assédio" },
           { key: "suspeito" as const, label: "Suspeito" },
+          { key: "stalking" as const, label: "Stalking" },
         ].map((f) => (
           <motion.button
             key={f.key}
