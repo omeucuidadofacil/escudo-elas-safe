@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, UserPlus, ClipboardList, ShieldAlert, Map, Navigation, LayoutDashboard, Settings, CreditCard } from "lucide-react";
+import { ArrowLeft, UserPlus, ClipboardList, ShieldAlert, Map, Navigation, LayoutDashboard, Settings, CreditCard, Send } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 const sections = [
