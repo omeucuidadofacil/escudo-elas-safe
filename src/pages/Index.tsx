@@ -32,7 +32,13 @@ const Index = () => {
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-[env(safe-area-inset-top)] mt-4">
         <div className="flex items-center gap-2">
-          <img src={logoElara} alt="Elara" className="w-8 h-8 object-contain" />
+          <motion.img
+            src={logoElara}
+            alt="Elara"
+            className="w-8 h-8 object-contain"
+            animate={{ scale: [1, 1.1, 1], opacity: [0.85, 1, 0.85] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
           <span className="text-base font-bold text-primary">Elara</span>
           <span className="text-xs text-muted-foreground">O Escudo Delas</span>
         </div>
