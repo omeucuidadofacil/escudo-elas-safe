@@ -33,6 +33,7 @@ const Index = () => {
         <div className="flex items-center gap-2">
           <Shield className="w-6 h-6 text-primary" />
           <span className="text-base font-bold text-primary">Elara</span>
+          <span className="text-xs text-muted-foreground">O Escudo Delas</span>
         </div>
         <div className="flex items-center gap-2">
           <button className="w-9 h-9 rounded-full bg-accent flex items-center justify-center">

@@ -117,9 +117,12 @@ const SOSPage = () => {
 
       <header className="flex items-center justify-between px-5 pt-[env(safe-area-inset-top)] mt-4">
         <div>
-          <h1 className="text-lg font-display text-foreground">
-            {isAlertActive ? "" : "Elara"}
-          </h1>
+          {!isAlertActive && (
+            <div className="flex items-center gap-2">
+              <h1 className="text-lg font-display text-foreground">Elara</h1>
+              <span className="text-xs text-muted-foreground">O Escudo Delas</span>
+            </div>
+          )}
         </div>
         {isAlertActive && (
           <motion.div
