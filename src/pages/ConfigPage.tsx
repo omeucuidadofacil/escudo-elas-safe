@@ -172,6 +172,34 @@ const ConfigPage = () => {
           </div>
         </section>
 
+        {/* Emergency Services */}
+        <section>
+          <h2 className="text-base font-display mb-3">Ligar para Emergência</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { label: "Delegacia da Mulher", number: "180", icon: Shield, color: "bg-primary/10 text-primary" },
+              { label: "Polícia Militar", number: "190", icon: Siren, color: "bg-destructive/10 text-destructive" },
+              { label: "SAMU", number: "192", icon: Ambulance, color: "bg-success/10 text-success" },
+              { label: "Bombeiros", number: "193", icon: Flame, color: "bg-warning/10 text-warning" },
+              { label: "Guarda Municipal", number: "153", icon: ShieldCheck, color: "bg-accent/10 text-accent-foreground" },
+              { label: "Disque Denúncia", number: "181", icon: PhoneCall, color: "bg-caution/10 text-caution-foreground" },
+            ].map((service, i) => (
+              <motion.a
+                key={i}
+                href={`tel:${service.number}`}
+                whileTap={{ scale: 0.95 }}
+                className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card shadow-card text-center"
+              >
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${service.color}`}>
+                  <service.icon size={22} />
+                </div>
+                <span className="text-xs font-medium text-foreground leading-tight">{service.label}</span>
+                <span className="text-lg font-bold text-primary">{service.number}</span>
+              </motion.a>
+            ))}
+          </div>
+        </section>
+
         {/* Settings menu */}
         <section className="space-y-1">
           {[
