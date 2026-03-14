@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, AlertTriangle, Eye, Plus } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import PaymentPopup from "@/components/PaymentPopup";
 
 type IncidentType = "agressao" | "assedio" | "suspeito" | "stalking";
 
@@ -28,8 +31,23 @@ const mockIncidents: Incident[] = [
 
 const MapaPage = () => {
   const [filter, setFilter] = useState<IncidentType | "all">("all");
+  const { subscribed, subscriptionLoading } = useAuth();
+  const navigate = useNavigate();
 
   const filtered = filter === "all" ? mockIncidents : mockIncidents.filter((i) => i.type === filter);
+
+  if (!subscriptionLoading && !subscribed) {
+    return (
+      <div className="min-h-svh flex flex-col pb-20 bg-background relative">
+        <div className="flex-1 filter blur-sm pointer-events-none opacity-50">
+          <div className="relative h-[45vh] bg-muted flex items-center justify-center">
+            <MapPin className="w-10 h-10 text-muted-foreground mx-auto" />
+          </div>
+        </div>
+        <PaymentPopup open={true} onClose={() => navigate("/")} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-svh flex flex-col pb-20 bg-background">

@@ -9,6 +9,8 @@ interface AuthContextType {
   isAdmin: boolean;
   cadastroCompleto: boolean;
   profileLoading: boolean;
+  subscribed: boolean;
+  subscriptionLoading: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -20,6 +22,8 @@ const AuthContext = createContext<AuthContextType>({
   isAdmin: false,
   cadastroCompleto: false,
   profileLoading: true,
+  subscribed: false,
+  subscriptionLoading: true,
   signOut: async () => {},
   refreshProfile: async () => {},
 });
@@ -32,6 +36,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [cadastroCompleto, setCadastroCompleto] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [subscribed, setSubscribed] = useState(false);
+  const [subscriptionLoading, setSubscriptionLoading] = useState(true);
+
+  const checkSubscription = async () => {
+    setSubscriptionLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("check-subscription");
+      if (!error && data) {
+        setSubscribed(data.subscribed === true);
+      } else {
+        setSubscribed(false);
+      }
+    } catch {
+      setSubscribed(false);
+    }
+    setSubscriptionLoading(false);
+  };
 
   const checkProfile = async (userId: string) => {
     setProfileLoading(true);
@@ -65,7 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
         if (session?.user) {
           // Check if user email is admin and auto-assign role
-          if (session.user.email === ADMIN_EMAIL) {
+        if (session.user.email === ADMIN_EMAIL) {
             supabase.from("user_roles").upsert({
               user_id: session.user.id,
               role: "admin" as any,
@@ -75,10 +96,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           } else {
             checkProfile(session.user.id);
           }
+          checkSubscription();
         } else {
           setIsAdmin(false);
           setCadastroCompleto(false);
           setProfileLoading(false);
+          setSubscribed(false);
+          setSubscriptionLoading(false);
         }
       }
     );
@@ -97,12 +121,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           checkProfile(session.user.id);
         }
+        checkSubscription();
       } else {
         setProfileLoading(false);
+        setSubscriptionLoading(false);
       }
     });
 
-    return () => subscription.unsubscribe();
+    // Re-check subscription every 60s
+    const interval = setInterval(() => {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user) checkSubscription();
+      });
+    }, 60000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearInterval(interval);
+    };
   }, []);
 
   const signOut = async () => {
@@ -112,7 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ session, user: session?.user ?? null, loading, isAdmin, cadastroCompleto, profileLoading, signOut, refreshProfile }}>
+    <AuthContext.Provider value={{ session, user: session?.user ?? null, loading, isAdmin, cadastroCompleto, profileLoading, subscribed, subscriptionLoading, signOut, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

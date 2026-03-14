@@ -1,15 +1,33 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navigation, MapPin, Clock, Shield, CheckCircle2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import PaymentPopup from "@/components/PaymentPopup";
 
 const TrajetoPage = () => {
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [destination, setDestination] = useState("");
+  const { subscribed, subscriptionLoading } = useAuth();
+  const navigate = useNavigate();
 
   const startMonitoring = () => {
     if (!destination.trim()) return;
     setIsMonitoring(true);
   };
+
+  if (!subscriptionLoading && !subscribed) {
+    return (
+      <div className="min-h-svh flex flex-col pb-20 bg-background relative">
+        <div className="flex-1 filter blur-sm pointer-events-none opacity-50">
+          <div className="px-5 pt-[env(safe-area-inset-top)] mt-4 mb-4">
+            <h1 className="text-xl font-display">Monitoramento de Trajeto</h1>
+          </div>
+        </div>
+        <PaymentPopup open={true} onClose={() => navigate("/")} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-svh flex flex-col pb-20 bg-background">
