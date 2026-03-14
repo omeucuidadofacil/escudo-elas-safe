@@ -216,7 +216,7 @@ const ConfigPage = () => {
             { icon: Bell, label: "Notificações" },
             { icon: Lock, label: "Privacidade e Segurança" },
             { icon: Phone, label: "Ativação Silenciosa" },
-            { icon: HelpCircle, label: "Ajuda" },
+            { icon: HelpCircle, label: "Como usar o app", action: () => navigate("/ajuda") },
           ].map((item, i) => (
             <motion.button
               key={i}
