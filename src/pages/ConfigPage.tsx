@@ -42,7 +42,7 @@ const ConfigPage = () => {
     const { data, error } = await supabase
       .from("contatos_emergencia")
       .insert({ ...newContact, user_id: user!.id })
-      .select("id, nome, telefone, relacao")
+      .select("id, nome, telefone, relacao, telegram_chat_id")
       .single();
 
     if (error) {
