@@ -1,1 +1,4 @@
 project_id = "guleyctbsglgaphoxgmz"
+
+[functions.send-sos-alert]
+verify_jwt = false
