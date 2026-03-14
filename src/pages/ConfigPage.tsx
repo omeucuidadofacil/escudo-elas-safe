@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { UserPlus, Phone, Trash2, ChevronRight, Bell, Lock, HelpCircle, User, LogOut } from "lucide-react";
+import { UserPlus, Phone, Trash2, ChevronRight, Bell, Lock, HelpCircle, User, LogOut, Shield, Siren, Ambulance, Flame, ShieldCheck, PhoneCall } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
