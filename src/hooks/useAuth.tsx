@@ -36,6 +36,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [cadastroCompleto, setCadastroCompleto] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [subscribed, setSubscribed] = useState(false);
+  const [subscriptionLoading, setSubscriptionLoading] = useState(true);
+
+  const checkSubscription = async () => {
+    setSubscriptionLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("check-subscription");
+      if (!error && data) {
+        setSubscribed(data.subscribed === true);
+      } else {
+        setSubscribed(false);
+      }
+    } catch {
+      setSubscribed(false);
+    }
+    setSubscriptionLoading(false);
+  };
 
   const checkProfile = async (userId: string) => {
     setProfileLoading(true);
