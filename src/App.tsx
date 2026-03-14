@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import BottomNav from "@/components/BottomNav";
+import Index from "@/pages/Index";
 import SOSPage from "@/pages/SOSPage";
 import MapaPage from "@/pages/MapaPage";
 import TrajetoPage from "@/pages/TrajetoPage";
@@ -69,25 +70,28 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <div className="max-w-md mx-auto relative">
-            <Routes>
-              <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-              <Route path="/cadastro" element={<PublicRoute><CadastroPage /></PublicRoute>} />
-              <Route path="/onboarding" element={<OnboardingPage />} />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
-              <Route path="/completar-cadastro" element={<CadastroRoute><CompletarCadastroPage /></CadastroRoute>} />
-              <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
-              {/* SOS page is public — visible to everyone */}
-              <Route path="/" element={<SOSPage />} />
-              {/* These require login + cadastro completo */}
-              <Route path="/mapa" element={<ProtectedRoute><MapaPage /></ProtectedRoute>} />
-              <Route path="/trajeto" element={<ProtectedRoute><TrajetoPage /></ProtectedRoute>} />
-              <Route path="/painel" element={<ProtectedRoute><PainelPage /></ProtectedRoute>} />
-              <Route path="/config" element={<ProtectedRoute><ConfigPage /></ProtectedRoute>} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <BottomNav />
-          </div>
+          <Routes>
+            <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
+            <Route path="*" element={
+              <div className="max-w-md mx-auto relative">
+                <Routes>
+                  <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+                  <Route path="/cadastro" element={<PublicRoute><CadastroPage /></PublicRoute>} />
+                  <Route path="/onboarding" element={<OnboardingPage />} />
+                  <Route path="/reset-password" element={<ResetPasswordPage />} />
+                  <Route path="/completar-cadastro" element={<CadastroRoute><CompletarCadastroPage /></CadastroRoute>} />
+                  <Route path="/" element={<Index />} />
+                  <Route path="/sos" element={<SOSPage />} />
+                  <Route path="/mapa" element={<ProtectedRoute><MapaPage /></ProtectedRoute>} />
+                  <Route path="/trajeto" element={<ProtectedRoute><TrajetoPage /></ProtectedRoute>} />
+                  <Route path="/painel" element={<ProtectedRoute><PainelPage /></ProtectedRoute>} />
+                  <Route path="/config" element={<ProtectedRoute><ConfigPage /></ProtectedRoute>} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                <BottomNav />
+              </div>
+            } />
+          </Routes>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
