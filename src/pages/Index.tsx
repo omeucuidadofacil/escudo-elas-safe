@@ -32,7 +32,7 @@ const Index = () => {
       <header className="flex items-center justify-between px-5 pt-[env(safe-area-inset-top)] mt-4">
         <div className="flex items-center gap-2">
           <Shield className="w-6 h-6 text-primary" />
-          <span className="text-base font-bold text-primary">Escudo Delas</span>
+          <span className="text-base font-bold text-primary">Elara</span>
         </div>
         <div className="flex items-center gap-2">
           <button className="w-9 h-9 rounded-full bg-accent flex items-center justify-center">

@@ -118,7 +118,7 @@ const SOSPage = () => {
       <header className="flex items-center justify-between px-5 pt-[env(safe-area-inset-top)] mt-4">
         <div>
           <h1 className="text-lg font-display text-foreground">
-            {isAlertActive ? "" : "Escudo Delas"}
+            {isAlertActive ? "" : "Elara"}
           </h1>
         </div>
         {isAlertActive && (
