@@ -32,7 +32,7 @@ const Index = () => {
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-[env(safe-area-inset-top)] mt-4">
         <div className="flex items-center gap-2">
-          <Shield className="w-6 h-6 text-primary" />
+          <img src={logoElara} alt="Elara" className="w-8 h-8 object-contain" />
           <span className="text-base font-bold text-primary">Elara</span>
           <span className="text-xs text-muted-foreground">O Escudo Delas</span>
         </div>
