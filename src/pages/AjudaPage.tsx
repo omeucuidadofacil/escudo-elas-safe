@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, UserPlus, ClipboardList, ShieldAlert, Map, Navigation, LayoutDashboard, Settings, CreditCard } from "lucide-react";
+import { ArrowLeft, UserPlus, ClipboardList, ShieldAlert, Map, Navigation, LayoutDashboard, Settings, CreditCard, Send } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 const sections = [
@@ -17,6 +17,11 @@ const sections = [
     icon: ShieldAlert,
     title: "Botão SOS",
     content: `O botão SOS é o recurso principal do app.\n\n• Como acionar: Na tela inicial, pressione e segure o botão vermelho por 3 segundos.\n• O que acontece: Um alerta é enviado com sua localização em tempo real para seus contatos de emergência.\n• Como cancelar: Caso tenha acionado por engano, toque em "Cancelar Alerta" na tela de SOS ativo.\n• Ativação Silenciosa: Em Configurações, ative o modo silencioso para acionar o SOS sem chamar atenção (sem som ou vibração).`,
+  },
+  {
+    icon: Send,
+    title: "Alertas via Telegram",
+    content: `Para que seus contatos de emergência recebam os alertas de SOS pelo Telegram, eles precisam seguir estes passos:\n\n1. Peça para seu contato abrir o Telegram e procurar o bot @valkyra_sos_bot.\n2. O contato deve enviar /start ou "começar" para o bot.\n3. O bot responderá com um número chamado Chat ID.\n4. Seu contato deve copiar esse número e enviar para você.\n5. No app, vá em Configurações → Contatos de Emergência → edite o contato e cole o Chat ID no campo "Telegram Chat ID".\n\n⚠️ Sem o Chat ID cadastrado, o contato não receberá alertas pelo Telegram.\n\n💡 Dica: Cada contato de emergência precisa fazer esse processo individualmente no próprio Telegram.`,
   },
   {
     icon: Map,
