@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
         if (session?.user) {
           // Check if user email is admin and auto-assign role
-          if (session.user.email === ADMIN_EMAIL) {
+        if (session.user.email === ADMIN_EMAIL) {
             supabase.from("user_roles").upsert({
               user_id: session.user.id,
               role: "admin" as any,
@@ -96,10 +96,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           } else {
             checkProfile(session.user.id);
           }
+          checkSubscription();
         } else {
           setIsAdmin(false);
           setCadastroCompleto(false);
           setProfileLoading(false);
+          setSubscribed(false);
+          setSubscriptionLoading(false);
         }
       }
     );
@@ -118,12 +121,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           checkProfile(session.user.id);
         }
+        checkSubscription();
       } else {
         setProfileLoading(false);
+        setSubscriptionLoading(false);
       }
     });
 
-    return () => subscription.unsubscribe();
+    // Re-check subscription every 60s
+    const interval = setInterval(() => {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user) checkSubscription();
+      });
+    }, 60000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearInterval(interval);
+    };
   }, []);
 
   const signOut = async () => {
