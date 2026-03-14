@@ -45,6 +45,7 @@ const MapaPage = () => {
         <div className="absolute top-1/4 left-1/3 w-4 h-4 rounded-full bg-destructive shadow-elevated" />
         <div className="absolute top-1/2 right-1/4 w-4 h-4 rounded-full bg-warning shadow-elevated" />
         <div className="absolute bottom-1/3 left-1/2 w-4 h-4 rounded-full bg-caution shadow-elevated" />
+        <div className="absolute top-1/3 right-1/3 w-4 h-4 rounded-full bg-primary shadow-elevated" />
       </div>
 
       {/* Filters */}
