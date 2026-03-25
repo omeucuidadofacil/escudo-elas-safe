@@ -6,18 +6,20 @@ import { toast } from "sonner";
 
 const PLANS = {
   monthly: {
-    price_id: "price_1TABTkD8opQz5zeauosr2S6P",
+    price_id: "price_MONTHLY_PLACEHOLDER",
+    product_id: "prod_U8SO6uIdyGJ9lR",
     label: "Mensal",
-    price: "R$ 4,99",
+    price: "R$ 7,99",
     period: "/mês",
     highlight: false,
   },
   annual: {
-    price_id: "price_1TABVjD8opQz5zeaAvqce1On",
+    price_id: "price_ANNUAL_PLACEHOLDER",
+    product_id: "prod_U8SQMr85ggMrov",
     label: "Anual",
-    price: "R$ 3,99",
+    price: "R$ 5,99",
     period: "/mês",
-    badge: "Economia de 20%",
+    badge: "Economia de 25%",
     highlight: true,
   },
 };
