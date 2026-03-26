@@ -7,6 +7,22 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+async function getStripeKey(supabaseClient: any): Promise<string> {
+  const envKey = Deno.env.get("STRIPE_SECRET_KEY");
+  if (envKey && (envKey.startsWith("sk_") || envKey.startsWith("rk_"))) {
+    return envKey;
+  }
+  const { data } = await supabaseClient
+    .from("api_keys")
+    .select("chave")
+    .eq("servico", "stripe")
+    .eq("ativo", true)
+    .limit(1)
+    .single();
+  if (data?.chave) return data.chave;
+  throw new Error("Stripe key not found in env or database");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -33,14 +49,12 @@ serve(async (req) => {
       .single();
     if (!roleData) throw new Error("Unauthorized: admin only");
 
-    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
-    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY not configured");
+    const stripeKey = await getStripeKey(supabaseClient);
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
 
     const { action, ...body } = await req.json();
 
     if (action === "create") {
-      // Create product + price on Stripe, then save to DB
       const product = await stripe.products.create({
         name: body.nome,
         description: body.descricao || undefined,
@@ -70,7 +84,6 @@ serve(async (req) => {
     }
 
     if (action === "update") {
-      // Update product name on Stripe + update DB
       const { data: existing } = await supabaseClient
         .from("planos")
         .select("*")
@@ -85,7 +98,6 @@ serve(async (req) => {
         });
       }
 
-      // If price changed, create new price and archive old
       let newPriceId = existing.stripe_price_id;
       if (body.preco !== Number(existing.preco)) {
         if (existing.stripe_price_id) {
@@ -123,8 +135,6 @@ serve(async (req) => {
       if (!existing) throw new Error("Plan not found");
 
       const newStatus = !existing.ativo;
-
-      // Archive/unarchive Stripe product
       if (existing.stripe_product_id) {
         await stripe.products.update(existing.stripe_product_id, { active: newStatus });
       }
@@ -148,7 +158,6 @@ serve(async (req) => {
         .single();
       if (!existing) throw new Error("Plan not found");
 
-      // Archive Stripe price and product
       if (existing.stripe_price_id) {
         await stripe.prices.update(existing.stripe_price_id, { active: false });
       }

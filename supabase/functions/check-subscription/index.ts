@@ -7,6 +7,22 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+async function getStripeKey(supabaseClient: any): Promise<string> {
+  const envKey = Deno.env.get("STRIPE_SECRET_KEY");
+  if (envKey && (envKey.startsWith("sk_") || envKey.startsWith("rk_"))) {
+    return envKey;
+  }
+  const { data } = await supabaseClient
+    .from("api_keys")
+    .select("chave")
+    .eq("servico", "stripe")
+    .eq("ativo", true)
+    .limit(1)
+    .single();
+  if (data?.chave) return data.chave;
+  throw new Error("Stripe key not found in env or database");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -19,8 +35,7 @@ serve(async (req) => {
   );
 
   try {
-    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
-    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
+    const stripeKey = await getStripeKey(supabaseClient);
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("No authorization header");
