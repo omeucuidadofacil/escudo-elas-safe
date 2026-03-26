@@ -1,28 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Check, X, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const PLANS = {
-  monthly: {
-    price_id: "price_MONTHLY_PLACEHOLDER",
-    product_id: "prod_U8SO6uIdyGJ9lR",
-    label: "Mensal",
-    price: "R$ 7,99",
-    period: "/mês",
-    highlight: false,
-  },
-  annual: {
-    price_id: "price_ANNUAL_PLACEHOLDER",
-    product_id: "prod_U8SQMr85ggMrov",
-    label: "Anual",
-    price: "R$ 5,99",
-    period: "/mês",
-    badge: "Economia de 25%",
-    highlight: true,
-  },
-};
+interface Plano {
+  id: string;
+  nome: string;
+  preco: number;
+  intervalo: string;
+  stripe_price_id: string | null;
+}
 
 interface PaymentPopupProps {
   open: boolean;
@@ -30,24 +18,79 @@ interface PaymentPopupProps {
 }
 
 const PaymentPopup = ({ open, onClose }: PaymentPopupProps) => {
-  const [selected, setSelected] = useState<"monthly" | "annual">("annual");
+  const [planos, setPlanos] = useState<Plano[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingPlanos, setLoadingPlanos] = useState(true);
+
+  useEffect(() => {
+    if (open) {
+      loadPlanos();
+    }
+  }, [open]);
+
+  const loadPlanos = async () => {
+    setLoadingPlanos(true);
+    const { data } = await supabase
+      .from("planos")
+      .select("id, nome, preco, intervalo, stripe_price_id")
+      .eq("ativo", true)
+      .order("preco", { ascending: true });
+
+    const list = (data || []) as Plano[];
+    setPlanos(list);
+
+    // Auto-select annual plan or first
+    const annual = list.find((p) => p.intervalo === "year");
+    setSelectedId(annual?.id || list[0]?.id || null);
+    setLoadingPlanos(false);
+  };
+
+  const selectedPlano = planos.find((p) => p.id === selectedId);
 
   const handleCheckout = async () => {
+    if (!selectedPlano?.stripe_price_id) {
+      toast.error("Plano sem configuração de pagamento.");
+      return;
+    }
     setLoading(true);
     try {
-      const plan = PLANS[selected];
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { price_id: plan.price_id },
+        body: { price_id: selectedPlano.stripe_price_id },
       });
       if (error) throw error;
       if (data?.url) {
         window.open(data.url, "_blank");
       }
-    } catch (err: any) {
+    } catch {
       toast.error("Erro ao iniciar pagamento. Tente novamente.");
     }
     setLoading(false);
+  };
+
+  const formatPrice = (plano: Plano) => {
+    if (plano.intervalo === "year") {
+      const monthly = plano.preco / 12;
+      return {
+        display: `R$ ${monthly.toFixed(2).replace(".", ",")}`,
+        period: "/mês",
+        total: `Total: R$ ${plano.preco.toFixed(2).replace(".", ",")}`,
+      };
+    }
+    return {
+      display: `R$ ${plano.preco.toFixed(2).replace(".", ",")}`,
+      period: "/mês",
+      total: null,
+    };
+  };
+
+  const getEconomia = () => {
+    const mensal = planos.find((p) => p.intervalo === "month");
+    const anual = planos.find((p) => p.intervalo === "year");
+    if (!mensal || !anual) return null;
+    const totalMensal = mensal.preco * 12;
+    const pct = Math.round(((totalMensal - anual.preco) / totalMensal) * 100);
+    return pct > 0 ? `Economia de ${pct}%` : null;
   };
 
   return (
@@ -82,46 +125,63 @@ const PaymentPopup = ({ open, onClose }: PaymentPopupProps) => {
               </p>
             </div>
 
-            <div className="space-y-3">
-              {(Object.entries(PLANS) as [keyof typeof PLANS, typeof PLANS[keyof typeof PLANS]][]).map(([key, plan]) => (
-                <motion.button
-                  key={key}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setSelected(key)}
-                  className={`w-full p-4 rounded-2xl border-2 text-left transition-colors relative ${
-                    selected === key
-                      ? "border-primary bg-primary/5"
-                      : "border-border bg-background"
-                  }`}
-                >
-                  {"badge" in plan && plan.badge && (
-                    <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-medium flex items-center gap-1">
-                      <Sparkles size={10} /> {plan.badge}
-                    </span>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-foreground">{plan.label}</p>
-                      <p className="text-sm text-muted-foreground">
-                        <span className="text-lg font-display text-foreground">{plan.price}</span>
-                        {plan.period}
-                      </p>
-                    </div>
-                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                      selected === key ? "border-primary bg-primary" : "border-muted-foreground"
-                    }`}>
-                      {selected === key && <Check size={14} className="text-primary-foreground" />}
-                    </div>
-                  </div>
-                </motion.button>
-              ))}
-            </div>
+            {loadingPlanos ? (
+              <div className="flex justify-center py-6">
+                <div className="w-6 h-6 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : planos.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">Nenhum plano disponível.</p>
+            ) : (
+              <div className="space-y-3">
+                {planos.map((plano) => {
+                  const prices = formatPrice(plano);
+                  const isAnnual = plano.intervalo === "year";
+                  const economia = isAnnual ? getEconomia() : null;
+
+                  return (
+                    <motion.button
+                      key={plano.id}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => setSelectedId(plano.id)}
+                      className={`w-full p-4 rounded-2xl border-2 text-left transition-colors relative ${
+                        selectedId === plano.id
+                          ? "border-primary bg-primary/5"
+                          : "border-border bg-background"
+                      }`}
+                    >
+                      {economia && (
+                        <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-medium flex items-center gap-1">
+                          <Sparkles size={10} /> {economia}
+                        </span>
+                      )}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-foreground">{plano.nome}</p>
+                          <p className="text-sm text-muted-foreground">
+                            <span className="text-lg font-display text-foreground">{prices.display}</span>
+                            {prices.period}
+                          </p>
+                          {prices.total && (
+                            <p className="text-[11px] text-muted-foreground">{prices.total}</p>
+                          )}
+                        </div>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                          selectedId === plano.id ? "border-primary bg-primary" : "border-muted-foreground"
+                        }`}>
+                          {selectedId === plano.id && <Check size={14} className="text-primary-foreground" />}
+                        </div>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            )}
 
             <div className="space-y-3">
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={handleCheckout}
-                disabled={loading}
+                disabled={loading || !selectedPlano}
                 className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display text-base disabled:opacity-50"
               >
                 {loading ? "Processando..." : "Assinar agora"}

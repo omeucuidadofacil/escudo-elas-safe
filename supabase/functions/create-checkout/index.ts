@@ -12,6 +12,22 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CREATE-CHECKOUT] ${step}${detailsStr}`);
 };
 
+async function getStripeKey(supabaseClient: any): Promise<string> {
+  const envKey = Deno.env.get("STRIPE_SECRET_KEY");
+  if (envKey && (envKey.startsWith("sk_") || envKey.startsWith("rk_"))) {
+    return envKey;
+  }
+  const { data } = await supabaseClient
+    .from("api_keys")
+    .select("chave")
+    .eq("servico", "stripe")
+    .eq("ativo", true)
+    .limit(1)
+    .single();
+  if (data?.chave) return data.chave;
+  throw new Error("Stripe key not found in env or database");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -19,7 +35,7 @@ serve(async (req) => {
 
   const supabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
   );
 
   try {
@@ -37,9 +53,8 @@ serve(async (req) => {
     logStep("Request body", { price_id });
     if (!price_id) throw new Error("price_id is required");
 
-    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
-    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
-    logStep("Stripe key verified");
+    const stripeKey = await getStripeKey(supabaseClient);
+    logStep("Stripe key resolved");
 
     const stripe = new Stripe(stripeKey, {
       apiVersion: "2025-08-27.basil",
