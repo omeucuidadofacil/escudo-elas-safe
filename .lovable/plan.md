@@ -1,24 +1,31 @@
 
 
-## Diagnóstico do erro de pagamento
+## Plano: Gerenciar chave Stripe e preços via Painel Admin
 
-O erro nos logs é claro:
+### Resumo
+Tornar o sistema totalmente dinâmico: o PaymentPopup busca os planos do banco de dados (tabela `planos`), e as edge functions leem a chave Stripe da tabela `api_keys` — tudo gerenciável pelo painel admin.
 
-> "The provided key 'rk_live_...' does not have the required permissions for this endpoint. Having the 'rak_checkout_session_write' permission would allow this request to continue."
+### Mudanças
 
-### Problema
-A chave Stripe configurada é uma **restricted key** (`rk_live_...`) que não tem permissão para criar sessões de checkout. Ela precisa da permissão `rak_checkout_session_write`.
+**1. PaymentPopup dinâmico** (`src/components/PaymentPopup.tsx`)
+- Remover o objeto `PLANS` hardcoded
+- Ao abrir, buscar planos ativos da tabela `planos` (que já tem `stripe_price_id`, `nome`, `preco`, `intervalo`)
+- Renderizar os planos dinamicamente com os valores do banco
+- Usar o `stripe_price_id` do banco ao chamar `create-checkout`
 
-### Solução
+**2. Edge functions leem chave Stripe do banco** 
+- Alterar `create-checkout`, `check-subscription` e `manage-plans` para:
+  - Primeiro tentar `Deno.env.get("STRIPE_SECRET_KEY")`
+  - Se não encontrar (ou como fallback), buscar na tabela `api_keys` onde `servico = 'stripe'` e `ativo = true`
+- Isso permite que o admin configure a chave Stripe pelo painel (aba APIs) sem depender de secrets do ambiente
 
-Você tem duas opções:
+**3. Nenhuma mudança no painel admin**
+- A aba "Planos" já cria planos com sincronização Stripe (cria produto + preço no Stripe e salva os IDs)
+- A aba "APIs" já permite adicionar chave Stripe com `servico = 'stripe'`
+- Apenas o fluxo de consumo precisa ser atualizado
 
-**Opção A (recomendada):** Substituir a restricted key por uma **secret key padrão** (`sk_live_...`) no painel Stripe → Developers → API Keys. A secret key tem todas as permissões.
-
-**Opção B:** Editar a restricted key no painel Stripe e adicionar a permissão **Checkout Sessions: Write**.
-
-Após obter a chave correta, atualizarei o secret `STRIPE_SECRET_KEY` no backend com o novo valor.
-
-### Etapa técnica
-- Atualizar o secret `STRIPE_SECRET_KEY` usando a ferramenta de secrets com a nova chave fornecida pelo usuário.
+### Detalhes técnicos
+- As edge functions usarão `SUPABASE_SERVICE_ROLE_KEY` para ler `api_keys` (bypassa RLS)
+- O PaymentPopup identifica mensal/anual pelo campo `intervalo` da tabela `planos`
+- O plano anual mostrará preço por mês calculado (preco / 12) e o badge de economia
 
