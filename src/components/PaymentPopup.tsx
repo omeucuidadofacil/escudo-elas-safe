@@ -194,10 +194,10 @@ const PaymentPopup = ({ open, onClose }: PaymentPopupProps) => {
                 disabled={loading || !selectedPlano}
                 className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-display text-base disabled:opacity-50"
               >
-                {loading ? "Processando..." : "Assinar agora"}
+                {loading ? "Processando..." : isFree ? "Começar grátis" : "Assinar agora"}
               </motion.button>
               <p className="text-[11px] text-muted-foreground text-center">
-                Pagamento seguro via Stripe. Cancele quando quiser.
+                {isFree ? "Sem cartão de crédito necessário." : "Pagamento seguro via Stripe. Cancele quando quiser."}
               </p>
             </div>
 
