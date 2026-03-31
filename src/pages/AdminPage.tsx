@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Shield, Users, AlertTriangle, MapPin, BarChart3, Trash2, Ban,
   CheckCircle2, LogOut, XCircle, Edit3, X, Save, Key, CreditCard,
-  Code, Settings, Bell, Search, Activity, TrendingUp, RefreshCw
+  Code, Settings, Bell, Search, Activity, TrendingUp, RefreshCw, Map
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,8 +12,9 @@ import { toast } from "sonner";
 
 import PlanosTab from "@/components/admin/PlanosTab";
 import ApiKeysTab from "@/components/admin/ApiKeysTab";
+import MapaTempoRealTab from "@/components/admin/MapaTempoRealTab";
 
-type Tab = "dashboard" | "usuarios" | "alertas" | "incidentes" | "planos" | "apis" | "config";
+type Tab = "dashboard" | "usuarios" | "alertas" | "incidentes" | "planos" | "apis" | "mapa" | "config";
 
 const sidebarTabs: { key: Tab; label: string; icon: any }[] = [
   { key: "dashboard", label: "Dashboard", icon: BarChart3 },
