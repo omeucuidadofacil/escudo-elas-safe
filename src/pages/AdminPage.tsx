@@ -21,6 +21,7 @@ const sidebarTabs: { key: Tab; label: string; icon: any }[] = [
   { key: "usuarios", label: "Usuárias", icon: Users },
   { key: "alertas", label: "Alertas", icon: Bell },
   { key: "incidentes", label: "Incidentes", icon: AlertTriangle },
+  { key: "mapa", label: "Mapa Tempo Real", icon: Map },
   { key: "planos", label: "Planos", icon: CreditCard },
   { key: "apis", label: "APIs", icon: Code },
   { key: "config", label: "Configurações", icon: Settings },
