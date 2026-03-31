@@ -62,9 +62,17 @@ const Index = () => {
 
         {/* Circle with logo filling entire space */}
         <motion.div
-          className="relative w-48 h-48 rounded-full flex items-center justify-center overflow-hidden shadow-[0_0_50px_hsl(270,60%,55%,0.4)]"
+          className="relative w-48 h-48 rounded-full flex items-center justify-center overflow-hidden"
           style={{
             background: "radial-gradient(circle at 40% 35%, hsl(260, 40%, 22%), hsl(250, 50%, 10%))",
+            boxShadow: `
+              0 8px 30px hsl(270 60% 55% / 0.5),
+              0 4px 12px hsl(250 50% 10% / 0.6),
+              inset 0 4px 8px hsl(270 60% 70% / 0.25),
+              inset 0 -4px 8px hsl(250 50% 5% / 0.5),
+              0 1px 0 hsl(270 40% 35% / 0.6)
+            `,
+            border: "1.5px solid hsl(270 50% 40% / 0.4)",
           }}
           animate={{ scale: [1, 1.04, 1] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -73,6 +81,9 @@ const Index = () => {
             src={valkyraLogo}
             alt="Valkyra Logo"
             className="w-full h-full object-cover"
+            style={{
+              filter: "drop-shadow(0 2px 4px hsl(250 50% 5% / 0.5))",
+            }}
           />
         </motion.div>
       </motion.button>
