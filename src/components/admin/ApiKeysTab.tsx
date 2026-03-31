@@ -14,10 +14,19 @@ interface ApiKey {
 }
 
 const SERVICOS = [
+  { value: "stripe", label: "Stripe" },
+  { value: "mercadopago", label: "Mercado Pago" },
+  { value: "pagseguro", label: "PagSeguro" },
+  { value: "paypal", label: "PayPal" },
+  { value: "pix", label: "PIX / API Pix" },
+  { value: "cielo", label: "Cielo" },
+  { value: "stone", label: "Stone" },
+  { value: "asaas", label: "Asaas" },
+  { value: "iugu", label: "Iugu" },
   { value: "google_maps", label: "Google Maps" },
   { value: "whatsapp", label: "WhatsApp API" },
   { value: "twilio", label: "Twilio" },
-  { value: "stripe", label: "Stripe" },
+  { value: "telegram", label: "Telegram Bot" },
   { value: "outro", label: "Outro" },
 ];
 
