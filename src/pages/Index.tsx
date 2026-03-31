@@ -24,41 +24,55 @@ const Index = () => {
       <motion.button
         onClick={handleTap}
         className="relative flex items-center justify-center mb-8 focus:outline-none"
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.93 }}
       >
-        {/* Outer pulse rings */}
+        {/* Pulse rings with color */}
         <motion.div
-          className="absolute w-52 h-52 rounded-full border border-primary/20"
-          animate={{ scale: [1, 1.3], opacity: [0.4, 0] }}
+          className="absolute w-52 h-52 rounded-full"
+          style={{ background: "radial-gradient(circle, hsl(270 60% 55% / 0.3), transparent)" }}
+          animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
         />
         <motion.div
-          className="absolute w-52 h-52 rounded-full border border-primary/15"
-          animate={{ scale: [1, 1.5], opacity: [0.3, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.6 }}
+          className="absolute w-52 h-52 rounded-full"
+          style={{ background: "radial-gradient(circle, hsl(250 80% 60% / 0.25), transparent)" }}
+          animate={{ scale: [1, 1.8], opacity: [0.4, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.4 }}
         />
         <motion.div
-          className="absolute w-52 h-52 rounded-full border border-primary/10"
-          animate={{ scale: [1, 1.7], opacity: [0.2, 0] }}
+          className="absolute w-52 h-52 rounded-full"
+          style={{ background: "radial-gradient(circle, hsl(280 70% 65% / 0.2), transparent)" }}
+          animate={{ scale: [1, 2.0], opacity: [0.35, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.8 }}
+        />
+        <motion.div
+          className="absolute w-52 h-52 rounded-full"
+          style={{ background: "radial-gradient(circle, hsl(260 60% 50% / 0.15), transparent)" }}
+          animate={{ scale: [1, 2.2], opacity: [0.3, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 1.2 }}
+        />
+        <motion.div
+          className="absolute w-52 h-52 rounded-full border-2 border-primary/20"
+          animate={{ scale: [1, 1.5], opacity: [0.4, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut", delay: 0.2 }}
         />
 
         {/* Glow behind */}
-        <div className="absolute w-48 h-48 rounded-full bg-primary/15 blur-2xl" />
+        <div className="absolute w-52 h-52 rounded-full bg-primary/20 blur-3xl" />
 
-        {/* Dark circle with logo */}
+        {/* Circle with logo filling entire space */}
         <motion.div
-          className="relative w-44 h-44 rounded-full flex items-center justify-center overflow-hidden shadow-[0_0_40px_hsl(270,60%,55%,0.3)]"
+          className="relative w-48 h-48 rounded-full flex items-center justify-center overflow-hidden shadow-[0_0_50px_hsl(270,60%,55%,0.4)]"
           style={{
             background: "radial-gradient(circle at 40% 35%, hsl(260, 40%, 22%), hsl(250, 50%, 10%))",
           }}
-          animate={{ scale: [1, 1.03, 1] }}
+          animate={{ scale: [1, 1.04, 1] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
           <img
             src={valkyraLogo}
             alt="Valkyra Logo"
-            className="w-36 h-auto object-contain"
+            className="w-full h-full object-cover"
           />
         </motion.div>
       </motion.button>
