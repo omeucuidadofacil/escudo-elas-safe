@@ -47,9 +47,19 @@ const PaymentPopup = ({ open, onClose }: PaymentPopupProps) => {
   };
 
   const selectedPlano = planos.find((p) => p.id === selectedId);
+  const isFree = selectedPlano && selectedPlano.preco === 0;
 
   const handleCheckout = async () => {
-    if (!selectedPlano?.stripe_price_id) {
+    if (!selectedPlano) return;
+
+    // Free plan - no checkout needed
+    if (isFree) {
+      toast.success("Plano gratuito ativado! Bem-vinda ao Valkyra.");
+      onClose?.();
+      return;
+    }
+
+    if (!selectedPlano.stripe_price_id) {
       toast.error("Plano sem configuração de pagamento.");
       return;
     }

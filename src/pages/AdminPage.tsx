@@ -484,6 +484,14 @@ const AdminPage = () => {
                 </div>
               )}
 
+              {tab === "mapa" && (
+                <div className="space-y-4">
+                  <h1 className="text-2xl font-bold text-foreground">Mapa em Tempo Real</h1>
+                  <p className="text-sm text-muted-foreground">Acompanhe a localização das usuárias em tempo real.</p>
+                  <MapaTempoRealTab />
+                </div>
+              )}
+
               {tab === "config" && (
                 <div className="space-y-6 max-w-xl">
                   <h1 className="text-2xl font-bold text-foreground">Configurações</h1>
