@@ -46,31 +46,40 @@ export type Database = {
       }
       api_keys: {
         Row: {
+          ambiente: string | null
           ativo: boolean
           chave: string
           created_at: string
+          descricao: string | null
           id: string
           nome: string
           servico: string
           updated_at: string
+          url_base: string | null
         }
         Insert: {
+          ambiente?: string | null
           ativo?: boolean
           chave: string
           created_at?: string
+          descricao?: string | null
           id?: string
           nome: string
           servico: string
           updated_at?: string
+          url_base?: string | null
         }
         Update: {
+          ambiente?: string | null
           ativo?: boolean
           chave?: string
           created_at?: string
+          descricao?: string | null
           id?: string
           nome?: string
           servico?: string
           updated_at?: string
+          url_base?: string | null
         }
         Relationships: []
       }
