@@ -112,12 +112,7 @@ const LoginPage = () => {
           </motion.button>
         </form>
 
-        <p className="text-center text-sm text-muted-foreground mt-6">
-          Não tem conta?{" "}
-          <button onClick={() => navigate("/cadastro")} className="text-primary font-medium">
-            Criar conta
-          </button>
-        </p>
+        {/* Login reservado para admin — sem link de cadastro */}
       </div>
     </div>
   );
