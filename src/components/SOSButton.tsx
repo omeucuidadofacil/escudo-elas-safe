@@ -117,8 +117,9 @@ const SOSButton = ({ onActivate, onCancel, isActive }: SOSButtonProps) => {
               whileTap={{ scale: 0.97 }}
               className="relative z-10 w-56 h-56 rounded-full bg-primary flex flex-col items-center justify-center select-none touch-none shadow-elevated"
             >
-              <Shield className="w-12 h-12 text-primary-foreground mb-2" strokeWidth={2.5} />
-              <span className="text-5xl font-display text-primary-foreground">SOS</span>
+              <Shield className="w-10 h-10 text-primary-foreground mb-1" strokeWidth={2.5} />
+              <span className="text-4xl font-display text-primary-foreground leading-none">SOS</span>
+              <span className="text-xs font-display text-primary-foreground/80 tracking-widest uppercase mt-0.5">Valkyra</span>
             </motion.button>
 
             <p className="absolute -bottom-12 text-sm text-muted-foreground text-center">
