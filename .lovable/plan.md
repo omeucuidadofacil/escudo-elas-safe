@@ -1,33 +1,50 @@
 
 
-## Plano: Fluxo de Login/Cadastro como na imagem
-
-### O que muda
-
-A tela de login (screenshot anexo) já está visualmente pronta. O pedido é ajustar o **fluxo de navegação**:
-
-1. **Usuários sem conta** → ao acessar a app, são redirecionados para `/cadastro` (criar conta)
-2. **Admin master** → acessa `/login` diretamente, digita email e senha, vai para `/admin`
-3. **Painel individual** → cada usuário tem seu próprio painel; admin tem o dele separado
-
-### Mudanças necessárias
-
-**1. Ajustar rotas em `src/App.tsx`**
-- A rota `/` (Index/home) deve ser acessível sem login (já é)
-- Quando um usuário não logado tenta acessar rotas protegidas, redirecionar para `/cadastro` (já funciona assim)
-- Manter `/login` como rota pública separada para o admin acessar manualmente
-
-**2. Ajustar `src/pages/LoginPage.tsx`**
-- Remover o link "Não tem conta? Criar conta" ou mantê-lo discreto — o login é primariamente para o admin
-- Manter o visual atual (já bate com a imagem)
-
-**3. Ajustar `src/pages/CadastroPage.tsx`**
-- Manter o link "Já tem conta? Entrar" para quem já tem conta poder ir ao login
-- Esse é o ponto de entrada padrão para novas usuárias
-
-**4. Ajustar `ProtectedRoute` em `src/App.tsx`**
-- Usuários não logados em rotas protegidas → redirecionar para `/cadastro` (já está assim na linha 34)
+## Plano: Completar cadastro de APIs e adicionar planos com valores definidos
 
 ### Resumo
-O fluxo já está quase correto. As mudanças são mínimas — basicamente garantir que o redirect padrão de usuários não logados vai para `/cadastro`, e o `/login` fica como acesso direto (principalmente para admin). Nenhuma mudança de banco de dados necessária.
+
+Duas mudanças principais:
+1. **APIs** — Expandir o formulário de cadastro de API keys com campos adicionais (URL base, tipo de chave, ambiente test/live, descrição) e adicionar mais provedores de pagamento ao catálogo
+2. **Planos** — Inserir no banco os 3 planos pré-definidos: Gratuito (R$0), Mensal (R$7,99) e Anual (R$71,88)
+
+### Mudanças
+
+**1. Expandir `ApiKeysTab.tsx` — Formulário completo de API**
+
+- Adicionar campos ao formulário: `descricao` (descrição/observação), `ambiente` (test/produção), `url_base` (URL base da API, opcional)
+- Expandir a lista `SERVICOS` com mais provedores: Rede, Getnet, Vindi, Pagar.me, SafraPay, PicPay, Banco Inter, Gerencianet/Efí
+- Exibir o ambiente (test/produção) como badge nos cards listados
+- Os novos campos são opcionais — não requer mudança no banco, pois podem ser armazenados no campo `chave` como JSON ou adicionados à tabela
+
+**2. Migração de banco — Adicionar colunas à tabela `api_keys`**
+
+```sql
+ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS descricao text DEFAULT '';
+ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS ambiente text DEFAULT 'producao';
+ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS url_base text DEFAULT '';
+```
+
+**3. Inserir planos no banco de dados**
+
+Criar migração para inserir os 3 planos (sem Stripe IDs por enquanto — admin pode vincular depois):
+
+```sql
+INSERT INTO planos (nome, descricao, preco, intervalo, ativo) VALUES
+  ('Gratuito', 'Acesso básico ao app com funcionalidades essenciais', 0, 'month', true),
+  ('Mensal', 'Proteção completa com todos os recursos premium', 7.99, 'month', true),
+  ('Anual', 'Proteção completa com desconto - economia de 25%', 71.88, 'year', true)
+ON CONFLICT DO NOTHING;
+```
+
+**4. Atualizar `ApiKeysTab.tsx`**
+
+- Formulário com os novos campos (descrição, ambiente, URL base)
+- Lista SERVICOS expandida com ~20+ provedores
+- Cards exibindo ambiente e descrição
+
+### Arquivos modificados
+
+- `src/components/admin/ApiKeysTab.tsx` — formulário completo + mais provedores
+- Nova migração SQL — colunas em `api_keys` + inserção dos 3 planos
 
