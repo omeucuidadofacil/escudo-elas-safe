@@ -62,7 +62,7 @@ const Index = () => {
 
         {/* Circle with logo filling entire space */}
         <motion.div
-          className="relative w-48 h-48 rounded-full flex items-center justify-center overflow-hidden"
+          className="relative w-60 h-60 rounded-full flex items-center justify-center overflow-hidden"
           style={{
             background: "radial-gradient(circle at 40% 35%, hsl(260, 40%, 22%), hsl(250, 50%, 10%))",
             boxShadow: `
