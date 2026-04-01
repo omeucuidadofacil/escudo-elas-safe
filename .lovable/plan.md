@@ -1,31 +1,33 @@
 
 
-## Plano: Gerenciar chave Stripe e preços via Painel Admin
+## Plano: Fluxo de Login/Cadastro como na imagem
+
+### O que muda
+
+A tela de login (screenshot anexo) já está visualmente pronta. O pedido é ajustar o **fluxo de navegação**:
+
+1. **Usuários sem conta** → ao acessar a app, são redirecionados para `/cadastro` (criar conta)
+2. **Admin master** → acessa `/login` diretamente, digita email e senha, vai para `/admin`
+3. **Painel individual** → cada usuário tem seu próprio painel; admin tem o dele separado
+
+### Mudanças necessárias
+
+**1. Ajustar rotas em `src/App.tsx`**
+- A rota `/` (Index/home) deve ser acessível sem login (já é)
+- Quando um usuário não logado tenta acessar rotas protegidas, redirecionar para `/cadastro` (já funciona assim)
+- Manter `/login` como rota pública separada para o admin acessar manualmente
+
+**2. Ajustar `src/pages/LoginPage.tsx`**
+- Remover o link "Não tem conta? Criar conta" ou mantê-lo discreto — o login é primariamente para o admin
+- Manter o visual atual (já bate com a imagem)
+
+**3. Ajustar `src/pages/CadastroPage.tsx`**
+- Manter o link "Já tem conta? Entrar" para quem já tem conta poder ir ao login
+- Esse é o ponto de entrada padrão para novas usuárias
+
+**4. Ajustar `ProtectedRoute` em `src/App.tsx`**
+- Usuários não logados em rotas protegidas → redirecionar para `/cadastro` (já está assim na linha 34)
 
 ### Resumo
-Tornar o sistema totalmente dinâmico: o PaymentPopup busca os planos do banco de dados (tabela `planos`), e as edge functions leem a chave Stripe da tabela `api_keys` — tudo gerenciável pelo painel admin.
-
-### Mudanças
-
-**1. PaymentPopup dinâmico** (`src/components/PaymentPopup.tsx`)
-- Remover o objeto `PLANS` hardcoded
-- Ao abrir, buscar planos ativos da tabela `planos` (que já tem `stripe_price_id`, `nome`, `preco`, `intervalo`)
-- Renderizar os planos dinamicamente com os valores do banco
-- Usar o `stripe_price_id` do banco ao chamar `create-checkout`
-
-**2. Edge functions leem chave Stripe do banco** 
-- Alterar `create-checkout`, `check-subscription` e `manage-plans` para:
-  - Primeiro tentar `Deno.env.get("STRIPE_SECRET_KEY")`
-  - Se não encontrar (ou como fallback), buscar na tabela `api_keys` onde `servico = 'stripe'` e `ativo = true`
-- Isso permite que o admin configure a chave Stripe pelo painel (aba APIs) sem depender de secrets do ambiente
-
-**3. Nenhuma mudança no painel admin**
-- A aba "Planos" já cria planos com sincronização Stripe (cria produto + preço no Stripe e salva os IDs)
-- A aba "APIs" já permite adicionar chave Stripe com `servico = 'stripe'`
-- Apenas o fluxo de consumo precisa ser atualizado
-
-### Detalhes técnicos
-- As edge functions usarão `SUPABASE_SERVICE_ROLE_KEY` para ler `api_keys` (bypassa RLS)
-- O PaymentPopup identifica mensal/anual pelo campo `intervalo` da tabela `planos`
-- O plano anual mostrará preço por mês calculado (preco / 12) e o badge de economia
+O fluxo já está quase correto. As mudanças são mínimas — basicamente garantir que o redirect padrão de usuários não logados vai para `/cadastro`, e o `/login` fica como acesso direto (principalmente para admin). Nenhuma mudança de banco de dados necessária.
 
