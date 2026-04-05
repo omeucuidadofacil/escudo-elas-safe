@@ -34,8 +34,8 @@ const CadastroPage = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Conta criada! Verifique seu email para confirmar.");
-      navigate("/login");
+      toast.success("Conta criada com sucesso!");
+      navigate("/completar-cadastro");
     }
     setLoading(false);
   };
