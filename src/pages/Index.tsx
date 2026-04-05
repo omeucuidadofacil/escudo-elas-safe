@@ -19,50 +19,50 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-svh flex flex-col items-center justify-center pb-20 bg-gradient-to-b from-[hsl(270,30%,95%)] to-background">
+    <div className="min-h-svh flex flex-col items-center justify-center pb-20 px-4 bg-gradient-to-b from-[hsl(270,30%,95%)] to-background">
       {/* Pulsating logo button */}
       <motion.button
         onClick={handleTap}
-        className="relative flex items-center justify-center mb-8 focus:outline-none"
+        className="relative flex items-center justify-center mb-6 sm:mb-8 focus:outline-none"
         whileTap={{ scale: 0.93 }}
       >
         {/* Pulse rings with color */}
         <motion.div
-          className="absolute w-52 h-52 rounded-full"
+          className="absolute w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full"
           style={{ background: "radial-gradient(circle, hsl(270 60% 55% / 0.3), transparent)" }}
           animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
         />
         <motion.div
-          className="absolute w-52 h-52 rounded-full"
+          className="absolute w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full"
           style={{ background: "radial-gradient(circle, hsl(250 80% 60% / 0.25), transparent)" }}
           animate={{ scale: [1, 1.8], opacity: [0.4, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.4 }}
         />
         <motion.div
-          className="absolute w-52 h-52 rounded-full"
+          className="absolute w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full"
           style={{ background: "radial-gradient(circle, hsl(280 70% 65% / 0.2), transparent)" }}
           animate={{ scale: [1, 2.0], opacity: [0.35, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.8 }}
         />
         <motion.div
-          className="absolute w-52 h-52 rounded-full"
+          className="absolute w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full"
           style={{ background: "radial-gradient(circle, hsl(260 60% 50% / 0.15), transparent)" }}
           animate={{ scale: [1, 2.2], opacity: [0.3, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 1.2 }}
         />
         <motion.div
-          className="absolute w-52 h-52 rounded-full border-2 border-primary/20"
+          className="absolute w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full border-2 border-primary/20"
           animate={{ scale: [1, 1.5], opacity: [0.4, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut", delay: 0.2 }}
         />
 
         {/* Glow behind */}
-        <div className="absolute w-52 h-52 rounded-full bg-primary/20 blur-3xl" />
+        <div className="absolute w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full bg-primary/20 blur-3xl" />
 
         {/* Circle with logo filling entire space */}
         <motion.div
-          className="relative w-60 h-60 rounded-full flex items-center justify-center overflow-hidden"
+          className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-60 md:h-60 rounded-full flex items-center justify-center overflow-hidden"
           style={{
             background: "radial-gradient(circle at 40% 35%, hsl(260, 40%, 22%), hsl(250, 50%, 10%))",
             boxShadow: `
@@ -89,14 +89,14 @@ const Index = () => {
       </motion.button>
 
       {/* Brand text */}
-      <h1 className="text-3xl font-bold text-foreground tracking-tight">Valkyra</h1>
-      <p className="text-sm text-muted-foreground mt-1.5">
+      <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Valkyra</h1>
+      <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 text-center">
         Escudo Delas — Sua segurança em primeiro lugar
       </p>
 
       {/* CTA */}
       <motion.p
-        className="mt-6 text-sm font-semibold text-primary cursor-pointer"
+        className="mt-5 sm:mt-6 text-sm font-semibold text-primary cursor-pointer"
         onClick={handleTap}
         animate={{ opacity: [1, 0.5, 1] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
