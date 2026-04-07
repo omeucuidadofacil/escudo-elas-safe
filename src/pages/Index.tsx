@@ -90,9 +90,6 @@ const Index = () => {
 
       {/* Brand text */}
       <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Valkyra</h1>
-      <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 text-center">
-        Escudo Delas — Sua segurança em primeiro lugar
-      </p>
 
       {/* CTA */}
       <motion.p
