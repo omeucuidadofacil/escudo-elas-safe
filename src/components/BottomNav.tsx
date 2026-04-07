@@ -44,6 +44,7 @@ const BottomNav = () => {
 
   // Reorder: Início, Mapa, SOS (center), Proteção, Ajustes
   const orderedTabs = [
+    { path: "/", icon: Home, label: "Início" },
     { path: "/mapa", icon: Map, label: "Mapa" },
     { path: "/sos", icon: Shield, label: "SOS", isCenter: true },
     { path: "/painel", icon: Shield, label: "Proteção" },
@@ -52,7 +53,7 @@ const BottomNav = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-xl border-t border-border">
-      <div className="flex items-center justify-around max-w-md mx-auto h-16 relative">
+      <div className="flex items-center justify-center gap-2 max-w-sm mx-auto h-16 relative">
         {orderedTabs.map((tab) => {
           const isActive = location.pathname === tab.path;
           const Icon = tab.icon;
