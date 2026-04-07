@@ -53,7 +53,7 @@ const BottomNav = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-xl border-t border-border">
-      <div className="flex items-center justify-center gap-2 max-w-sm mx-auto h-16 relative">
+      <div className="flex items-center justify-center gap-0 max-w-xs mx-auto h-16 relative">
         {orderedTabs.map((tab) => {
           const isActive = location.pathname === tab.path;
           const Icon = tab.icon;
