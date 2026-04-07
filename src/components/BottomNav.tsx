@@ -53,7 +53,7 @@ const BottomNav = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-xl border-t border-border">
-      <div className="flex items-center justify-center max-w-[260px] mx-auto h-16 relative">
+      <div className="flex items-center justify-center gap-0.5 w-fit mx-auto h-16 relative px-2">
         {orderedTabs.map((tab) => {
           const isActive = location.pathname === tab.path;
           const Icon = tab.icon;
@@ -80,7 +80,7 @@ const BottomNav = () => {
             <motion.button
               key={tab.path}
               onClick={() => handleNav(tab.path)}
-              className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full transition-colors ${
+              className={`flex flex-col items-center justify-center gap-0.5 h-full min-w-[52px] px-1 -translate-y-1 transition-colors ${
                 isActive ? "text-primary" : "text-muted-foreground"
               }`}
               whileTap={{ scale: 0.95 }}
