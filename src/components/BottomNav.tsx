@@ -80,7 +80,7 @@ const BottomNav = () => {
             <motion.button
               key={tab.path}
               onClick={() => handleNav(tab.path)}
-              className={`flex flex-col items-center justify-center gap-0.5 h-full min-w-[52px] px-1 -translate-y-1 transition-colors ${
+              className={`flex flex-col items-center justify-center gap-0.5 h-full min-w-[44px] px-0.5 -translate-y-1 transition-colors ${
                 isActive ? "text-primary" : "text-muted-foreground"
               }`}
               whileTap={{ scale: 0.95 }}
