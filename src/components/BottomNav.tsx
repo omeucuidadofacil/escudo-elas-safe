@@ -44,7 +44,6 @@ const BottomNav = () => {
 
   // Reorder: Início, Mapa, SOS (center), Proteção, Ajustes
   const orderedTabs = [
-    { path: "/", icon: Home, label: "Início" },
     { path: "/mapa", icon: Map, label: "Mapa" },
     { path: "/sos", icon: Shield, label: "SOS", isCenter: true },
     { path: "/painel", icon: Shield, label: "Proteção" },
