@@ -91,15 +91,6 @@ const Index = () => {
       {/* Brand text */}
       <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Valkyra</h1>
 
-      {/* CTA */}
-      <motion.p
-        className="mt-5 sm:mt-6 text-sm font-semibold text-primary cursor-pointer"
-        onClick={handleTap}
-        animate={{ opacity: [1, 0.5, 1] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        Toque para começar
-      </motion.p>
     </div>
   );
 };
