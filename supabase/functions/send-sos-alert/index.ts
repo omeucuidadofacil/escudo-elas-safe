@@ -60,6 +60,7 @@ Deno.serve(async (req) => {
     }
 
     const message = `🚨 <b>ALERTA SOS - VALKYRA</b> 🚨\n\n` +
+      `Preciso da sua atenção e ajuda!\n\n` +
       `<b>${userName}</b> ativou um alerta de emergência!` +
       `${locationText}\n\n` +
       `⚠️ Entre em contato imediatamente.\n` +
