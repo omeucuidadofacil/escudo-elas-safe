@@ -64,7 +64,8 @@ const SOSPage = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => sendAlert(pos.coords.latitude, pos.coords.longitude),
-        () => sendAlert()
+        () => sendAlert(),
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
       );
     } else {
       await sendAlert();
