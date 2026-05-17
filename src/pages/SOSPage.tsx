@@ -33,10 +33,7 @@ const SOSPage = () => {
     setTimeout(() => setShowFlash(false), 200);
     setIsAlertActive(true);
 
-    let latitude: number | undefined;
-    let longitude: number | undefined;
-
-    const sendAlert = async (lat?: number, lng?: number) => {
+    const sendAlert = async (lat?: number, lng?: number, accuracy?: number) => {
       await supabase.from("alertas").insert({
         user_id: user!.id,
         tipo_alerta: "sos",
@@ -54,7 +51,7 @@ const SOSPage = () => {
       // Send Telegram notifications
       try {
         await supabase.functions.invoke("send-sos-alert", {
-          body: { user_id: user!.id, latitude: lat, longitude: lng },
+          body: { user_id: user!.id, latitude: lat, longitude: lng, accuracy },
         });
       } catch (e) {
         console.error("Error sending SOS alert notifications:", e);
@@ -63,7 +60,7 @@ const SOSPage = () => {
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => sendAlert(pos.coords.latitude, pos.coords.longitude),
+        (pos) => sendAlert(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy),
         () => sendAlert(),
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
       );
